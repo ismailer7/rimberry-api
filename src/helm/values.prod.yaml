@@ -1,0 +1,11 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+env: prod
+replicaCount: 1
+host: fieldonline.en-apps.euro.iberdrola.local
+serviceName: fieldonline-data-adapter-service
+image:
+  tag: v1
+  pullPolicy: Always
+  imagePullSecretName: docker-registry-secret
+influx_token: secret

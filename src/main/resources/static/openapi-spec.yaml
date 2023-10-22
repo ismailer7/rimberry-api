@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Swagger Ecommerce Store API - OpenAPI 3.0
+  contact:
+    email: ismailrzouki7@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+servers:
+  - url: https://localhost:8080/api/v1
+tags:
+  - name: Authentication
+    description: Operations about User Authentication
+
+paths:
+  /user/login:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Authentication
+      operationId: loginUser
+      summary: User Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cred'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '500':
+          description: Invalid Credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Cred:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "ismaa"
+        password:
+          type: string
+          example: "plainText"
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiYXVkIjpbImFkbWluIl0sImlzcyI6Im1hc29uLm1ldGFtdWcubmV0IiwiZXhwIjoxNTc0NTEyNzY1LCJpYXQiOjE1NjY3MzY3NjUsImp0aSI6ImY3YmZlMzNmLTdiZjctNGViNC04ZTU5LTk5MTc5OWI1ZWI4YSJ9.EVcCaSqrSNVs3cWdLt-qkoqUk7rPHEOsDHS8yejwxMw"
+        expiration:
+          type: string
+          format: date-time
+          example: "1235216897543"
+        roles:
+          type: string
+          example: "ADMIN;SUPERVISOR;STAFF"
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 500
+        exception:
+          type: string
+          example: Exception Details from the API

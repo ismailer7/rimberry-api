@@ -1,4 +1,4 @@
-package idev.io.storeapi;
+package io.idev.storeapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
