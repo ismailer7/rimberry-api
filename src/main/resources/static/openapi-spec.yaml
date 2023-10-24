@@ -16,8 +16,6 @@ tags:
 paths:
   /user/login:
     post:
-      security:
-        - bearerAuth: []
       tags:
         - Authentication
       operationId: loginUser
@@ -43,11 +41,44 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Response'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                $ref: '#/components/schemas/Response'
+  
+  /user/add:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Authentication
+      operationId: addUser
+      summary: User Registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPayload'
+        required: true
+      responses:
+        '200':
+          description: User Successfully Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Add New User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
 
 components:
   securitySchemes:
@@ -59,9 +90,9 @@ components:
     Cred:
       type: object
       properties:
-        username:
+        email:
           type: string
-          example: "ismaa"
+          example: "ismaa@domain.com"
         password:
           type: string
           example: "plainText"
@@ -77,12 +108,47 @@ components:
         roles:
           type: string
           example: "ADMIN;SUPERVISOR;STAFF"
-    Error:
+    UserPayload:
+      type: object
+      properties:
+        usename:
+          type: string
+          example: "user12"
+        password: 
+          type: string
+          example: "password12"
+        email:
+          type: string
+          example: "test@domain.com"
+        isActive: 
+          type: boolean
+          example: true
+        isdeleted:
+          type: boolean
+          example: false
+        icon:
+          type: string
+          example: "https://io.idev/imgs/icon12.png"
+        lastLoggedIn:
+          type: string
+          format: date-time
+          example: null
+        lastUpdate:
+          type: string
+          format: date-time
+          example: null
+        roles:
+          type: string
+          example: "ADMIN"
+    Response:
       type: object
       properties:
         code:
           type: integer
-          example: 500
-        exception:
+          example: 200
+        message:
           type: string
           example: Exception Details from the API
+        details:
+          type: string
+          example: "Exception in thread 'main' java.lang.NullPointerException: Oops!"
