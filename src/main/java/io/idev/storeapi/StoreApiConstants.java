@@ -9,4 +9,5 @@ public class StoreApiConstants {
 
     public static final String API_BASE_URI = "/api/v1/";
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    public static final String BASE_PACKAGE = "io.idev.sotreapi.*";
 }

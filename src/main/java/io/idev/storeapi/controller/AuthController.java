@@ -1,5 +1,7 @@
 package io.idev.storeapi.controller;
 
+import java.util.HashMap;
+
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +14,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ import io.idev.storeapi.model.Response;
 import io.idev.storeapi.model.Token;
 import io.idev.storeapi.model.UserPayload;
 import io.idev.storeapi.service.JwtUserDetailsService;
+import io.idev.storeapi.service.UserServiceImpl;
 import io.idev.storeapi.utils.JwtTokenUtil;
 
 @RequestMapping(StoreApiConstants.API_BASE_URI)
@@ -35,15 +37,22 @@ public class AuthController implements UserApi {
 
 	private static Logger logger = LogManager.getLogger(AuthController.class.toString());
 
-	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	@Autowired
 	private JwtUserDetailsService userDetailsService;
 
-	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
+	UserServiceImpl userServiceImpl;
+
+	
+	public AuthController(AuthenticationManager authenticationManager, JwtUserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil, UserServiceImpl userServiceImpl) {
+		this.authenticationManager = authenticationManager;
+		this.userDetailsService = userDetailsService;
+		this.jwtTokenUtil = jwtTokenUtil;
+		this.userServiceImpl = userServiceImpl;
+	}
+	
 	private void authenticate(String username, String password) throws Exception {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 	}
@@ -57,7 +66,7 @@ public class AuthController implements UserApi {
 			throw new UserAuthenticationException(String.format("Bad Credentials Provided", ""));
 		} catch (LockedException e) {
 			throw new UserAuthenticationException(
-					String.format("User with username [%s] is Disbaled!", cred.getEmail()));
+					String.format("User is currently Disbaled! Contact your Administrator.", cred.getEmail()));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -66,10 +75,19 @@ public class AuthController implements UserApi {
 
 		final String token = jwtTokenUtil.generateToken(userDetails);
 
-		return new ResponseEntity<>(new Token().token(token).expiration("125478963").roles(""), HttpStatus.OK);
+		userServiceImpl.updateUserWithFields(cred.getEmail(), new HashMap<String, String>() {
+			{
+				put("token", token);
+			}
+		});
+
+		Token response = new Token().token(token).expiration("125478963")
+				.roles(userServiceImpl.getByEmail(cred.getEmail()).getRoles());
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
-	
+
 	@Override
 	public ResponseEntity<Response> addUser(@Valid @RequestBody UserPayload userPayload) {
 		return null;
