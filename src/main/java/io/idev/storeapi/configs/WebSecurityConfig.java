@@ -1,6 +1,5 @@
 package io.idev.storeapi.configs;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,13 +21,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
-	@Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-	@Autowired
 	private UserDetailsService jwtUserDetailsService;
 
-	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
 //	@Autowired
@@ -43,6 +39,13 @@ public class WebSecurityConfig {
 //		// Use BCryptPasswordEncoder
 //		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 //	}
+
+	public WebSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+			UserDetailsService jwtUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+		this.jwtUserDetailsService = jwtUserDetailsService;
+		this.jwtRequestFilter = jwtRequestFilter;
+	}
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
@@ -121,7 +124,8 @@ public class WebSecurityConfig {
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring().antMatchers("/js/**", "/images/**", "/v3/api-docs", "/configuration/ui",
-				"/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-ui/**", "/swagger-ui/**", "/v3/api-docs/**");
+				"/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-ui/**",
+				"/swagger-ui/**", "/v3/api-docs/**");
 	}
 
 }

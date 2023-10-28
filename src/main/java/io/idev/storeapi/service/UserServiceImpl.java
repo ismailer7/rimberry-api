@@ -15,12 +15,19 @@ import io.idev.storeapi.service.interfaces.IUserService;
 @Service
 public class UserServiceImpl implements IUserService<UserDto, Integer> {
 
-	@Autowired
 	IUserRepository userRepository;
 
+	private ModelMapper modelMapper;
+
+	public UserServiceImpl(IUserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
+
 	@Autowired
-	ModelMapper modelMapper;
-	
+	public void setModelMapper(ModelMapper modelMapper) {
+		this.modelMapper = modelMapper;
+	}
+
 	@Override
 	public UserDto get(Integer id) {
 		Optional<User> op = userRepository.findById(id);
@@ -28,13 +35,12 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 		UserDto userDto = this.modelMapper.map(user, UserDto.class);
 		return userDto;
 	}
-	
 
 	@Override
 	public UserDto getByEmail(String email) {
-		User user =  userRepository.getByEmail(email);
+		User user = userRepository.getByEmail(email);
 		UserDto userDto = null;
-		if(user != null) {
+		if (user != null) {
 			userDto = this.modelMapper.map(user, UserDto.class);
 		}
 		return userDto;
@@ -45,9 +51,9 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 		UserDto userDto = getByEmail(username);
 		for (Map.Entry<String, String> entry : fields.entrySet()) {
 			switch (entry.getKey()) {
-				case "token":
-					userDto.setToken(entry.getValue());
-					break;
+			case "token":
+				userDto.setToken(entry.getValue());
+				break;
 			}
 		}
 		userRepository.saveAndFlush(this.modelMapper.map(userDto, User.class));
