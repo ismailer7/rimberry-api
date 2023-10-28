@@ -33,7 +33,10 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 	@Override
 	public UserDto getByEmail(String email) {
 		User user =  userRepository.getByEmail(email);
-		UserDto userDto = this.modelMapper.map(user, UserDto.class);
+		UserDto userDto = null;
+		if(user != null) {
+			userDto = this.modelMapper.map(user, UserDto.class);
+		}
 		return userDto;
 	}
 
