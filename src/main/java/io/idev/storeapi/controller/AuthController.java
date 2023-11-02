@@ -1,6 +1,7 @@
 package io.idev.storeapi.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -25,7 +26,8 @@ import io.idev.storeapi.exceptions.UserAuthenticationException;
 import io.idev.storeapi.model.Cred;
 import io.idev.storeapi.model.Response;
 import io.idev.storeapi.model.Token;
-import io.idev.storeapi.model.UserPayload;
+import io.idev.storeapi.model.UserDto;
+import io.idev.storeapi.service.AuthService;
 import io.idev.storeapi.service.JwtUserDetailsService;
 import io.idev.storeapi.service.UserServiceImpl;
 import io.idev.storeapi.utils.JwtTokenUtil;
@@ -43,15 +45,17 @@ public class AuthController implements UserApi {
 	private JwtTokenUtil jwtTokenUtil;
 
 	UserServiceImpl userServiceImpl;
+	AuthService authService;
 
-	
-	public AuthController(AuthenticationManager authenticationManager, JwtUserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil, UserServiceImpl userServiceImpl) {
+	public AuthController(AuthenticationManager authenticationManager, JwtUserDetailsService userDetailsService,
+			JwtTokenUtil jwtTokenUtil, UserServiceImpl userServiceImpl, AuthService authService) {
 		this.authenticationManager = authenticationManager;
 		this.userDetailsService = userDetailsService;
 		this.jwtTokenUtil = jwtTokenUtil;
 		this.userServiceImpl = userServiceImpl;
+		this.authService = authService;
 	}
-	
+
 	private void authenticate(String username, String password) throws Exception {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 	}
@@ -77,19 +81,25 @@ public class AuthController implements UserApi {
 		userServiceImpl.updateUserWithFields(cred.getEmail(), new HashMap<String, String>() {
 			{
 				put("token", token);
+				put("logged", "True");
 			}
 		});
 
-		Token response = new Token().token(token).expiration("125478963")
-				.roles(userServiceImpl.getByEmail(cred.getEmail()).getRoles());
+		Token response = new Token().token(token).expiration(authService.getExipartion(token))
+				.roles(userServiceImpl.getUserRolesByEmail(cred.getEmail()));
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
 
 	@Override
-	public ResponseEntity<Response> addUser(@Valid @RequestBody UserPayload userPayload) {
+	public ResponseEntity<Response> addUser(@Valid @RequestBody UserDto userPayload) {
 		return null;
+	}
+	
+	@Override
+	public ResponseEntity<List<UserDto>> getAllUsers() {
+		return new ResponseEntity<>(this.userServiceImpl.getAll(), HttpStatus.OK);
 	}
 
 	@ExceptionHandler(value = UserAuthenticationException.class)

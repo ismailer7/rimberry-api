@@ -1,5 +1,6 @@
 package io.idev.storeapi.service.interfaces;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IUserService<T, L> {
@@ -9,4 +10,6 @@ public interface IUserService<T, L> {
 	T getByEmail(String email);
 	
 	void updateUserWithFields(String username, Map<String, String> fields);
+	
+	List<T> getAll();
 }

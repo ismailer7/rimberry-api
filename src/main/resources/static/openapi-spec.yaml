@@ -12,7 +12,12 @@ servers:
 tags:
   - name: Authentication
     description: Operations about User Authentication
+  - name: User Management
+    description: Operations on User
 
+security:
+   - bearerAuth: []
+   
 paths:
   /user/login:
     post:
@@ -45,7 +50,35 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Response'
-  
+    
+  /user/getAll:
+    get:
+      security:
+        - bearerAuth: []
+      tags: 
+        - User Management
+      operationId: getAllUsers
+      summary: get All Registered Users
+      responses:
+        '200':
+          description: User List
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDtoList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserDtoList'
+        '500':
+          description: Failed to Fetch User List
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
   /user/add:
     post:
       security:
@@ -58,7 +91,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserPayload'
+              $ref: '#/components/schemas/UserDto'
         required: true
       responses:
         '200':
@@ -103,43 +136,84 @@ components:
           type: string
           example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiYXVkIjpbImFkbWluIl0sImlzcyI6Im1hc29uLm1ldGFtdWcubmV0IiwiZXhwIjoxNTc0NTEyNzY1LCJpYXQiOjE1NjY3MzY3NjUsImp0aSI6ImY3YmZlMzNmLTdiZjctNGViNC04ZTU5LTk5MTc5OWI1ZWI4YSJ9.EVcCaSqrSNVs3cWdLt-qkoqUk7rPHEOsDHS8yejwxMw"
         expiration:
-          type: string
-          example: "1235216897543"
+          type: integer
+          format: int64
+          example: 1235216897543
         roles:
           type: string
           example: "ADMIN;SUPERVISOR;STAFF"
-    UserPayload:
+    UserResponse:
       type: object
       properties:
-        usename:
-          type: string
-          example: "user12"
-        password: 
-          type: string
-          example: "password12"
+        id:
+          type: integer
+          format: int64
+          example: 111
         email:
           type: string
-          example: "test@domain.com"
+          example: ismaa@domain.com
+        isActive:
+          type: boolean
+          example: true
+        isLogged:
+          type: boolean
+          example: true
+        created:
+          type: string
+          format: date-time
+          example: null
+        updated:
+          type: string
+          format: date-time
+          example: null
+        roles:
+          type: string
+          example: ADMIN|STAFF
+          
+    UserDtoList:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserDto'
+        
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 111
+        email:
+          type: string
+          example: "ismaa@domain.com"
+        password:
+          type: string
+          example: password
+        token:
+           type: string
+           example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiYXVkIj..."
         isActive: 
           type: boolean
           example: true
-        isdeleted:
+        isDeleted:
           type: boolean
           example: false
         icon:
           type: string
           example: "https://io.idev/imgs/icon12.png"
-        lastLoggedIn:
+        isLogged:
+          type: boolean
+          example: false
+        created:
           type: string
           format: date-time
           example: null
-        lastUpdate:
+        updated:
           type: string
           format: date-time
           example: null
         roles:
           type: string
-          example: "ADMIN"
+          example: ADMIN|STAFF
     Response:
       type: object
       properties:
@@ -152,3 +226,4 @@ components:
         details:
           type: string
           example: "Exception in thread 'main' java.lang.NullPointerException: Oops!"
+    

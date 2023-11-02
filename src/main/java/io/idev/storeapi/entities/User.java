@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -31,10 +32,10 @@ public class User {
 	private String token;
 
 	@Column(name = "ACTIVE")
-	private boolean isActive;
+	private Boolean isActive;
 
 	@Column(name = "DELETED")
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
 	@Column(name = "UPDATED")
 	private Date updated;
@@ -44,4 +45,12 @@ public class User {
 
 	@Column(name = "ROLES")
 	private String roles;
+	
+	@Lob
+	@Column(name = "ICON")
+	private String icon;
+	
+	@Column(name = "LOGGED")
+	private boolean isLogged;
+	
 }

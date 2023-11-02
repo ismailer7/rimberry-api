@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import io.idev.storeapi.dto.UserDto;
 import io.idev.storeapi.dto.UserPrincipal;
+import io.idev.storeapi.model.UserDto;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -20,8 +20,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserDto userDto = userService.getByEmail(username);
 		UserPrincipal userPrincipal = null;
-		if (userDto != null && !userDto.isDeleted()) {
-			if (userDto.isActive()) {
+		if (userDto != null && (userDto.getIsDeleted() == null
+				|| (userDto.getIsDeleted() != null && !userDto.getIsDeleted().booleanValue()))) {
+			if (userDto.getIsActive()) {
 				userPrincipal = new UserPrincipal(username, userDto.getPassword(), new ArrayList<>());
 			} else {
 				userPrincipal = new UserPrincipal(username, userDto.getPassword(), false, new ArrayList<>());
@@ -36,6 +37,5 @@ public class JwtUserDetailsService implements UserDetailsService {
 	public void setUserService(UserServiceImpl userService) {
 		this.userService = userService;
 	}
-	
-	
+
 }
