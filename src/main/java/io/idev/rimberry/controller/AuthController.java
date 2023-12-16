@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.idev.rimberry.StoreApiConstants;
-import io.idev.rimberry.entities.User;
 import io.idev.rimberry.exceptions.UserAuthenticationException;
 import io.idev.rimberry.service.AuthService;
 import io.idev.rimberry.service.JwtUserDetailsService;
@@ -93,14 +91,23 @@ public class AuthController implements UserApi {
 		});
 		UserDto currentUser = userServiceImpl.getByEmail(cred.getEmail());
 		Token response = new Token().token(token).expiration(authService.getExipartion(token))
-				.roles(userServiceImpl.getUserRolesByEmail(cred.getEmail()))
-				.gender(currentUser.getGender())
-				.firstname(currentUser.getFirstName())
-				.lastname(currentUser.getLastName())
+				.roles(userServiceImpl.getUserRolesByEmail(cred.getEmail())).gender(currentUser.getGender())
+				.firstname(currentUser.getFirstName()).lastname(currentUser.getLastName())
 				.username(currentUser.getUserName());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
+	}
+
+	@Override
+	public ResponseEntity<Response> logout(@PathVariable("userId") Integer userId) {
+		userServiceImpl.updateUserWithFields(userId, new HashMap<String, String>() {
+			{
+				put("token", null);
+				put("logged", "False");
+			}
+		});
+		return new ResponseEntity<Response>(HttpStatus.OK);
 	}
 
 	@Override
@@ -109,7 +116,7 @@ public class AuthController implements UserApi {
 		Response response = new Response().code(200).message("User Added!").details(null);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
-	
+
 	@Override
 	public ResponseEntity<Response> editUser(@Valid @RequestBody UserDto userPayload) {
 		userServiceImpl.edit(userPayload);
@@ -121,7 +128,8 @@ public class AuthController implements UserApi {
 	public ResponseEntity<Response> deleteUser(
 			@Parameter(name = "userId", description = "Numeric ID of the user to delete", required = true, in = ParameterIn.PATH) @PathVariable("userId") Integer userId) {
 		userServiceImpl.delete(userId);
-		Response response = new Response().code(200).message(String.format("User with ID %d Deleted", userId)).details(null);
+		Response response = new Response().code(200).message(String.format("User with ID %d Deleted", userId))
+				.details(null);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 
@@ -129,11 +137,14 @@ public class AuthController implements UserApi {
 	public ResponseEntity<List<UserDto>> getAllUsers() {
 		return new ResponseEntity<>(this.userServiceImpl.getAll(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("users")
-	public Page<User> getUsers(@RequestParam int page) {
-		org.springframework.data.domain.Page<User> userage = this.userServiceImpl.getByPage(--page);
-		return userage;
+	public ResponseEntity<io.idev.storeapi.model.Page> getUsers(@RequestParam int page) {
+		org.springframework.data.domain.Page<UserDto> userpage = this.userServiceImpl.getByPage(--page);
+		io.idev.storeapi.model.Page pageObject = new io.idev.storeapi.model.Page().currentPage(userpage.getNumber() + 1)
+				.totalPages(userpage.getTotalPages()).content(userpage.getContent())
+				.totalElements(userpage.getNumberOfElements()).hasNext(userpage.hasNext());
+		return new ResponseEntity<io.idev.storeapi.model.Page>(pageObject, HttpStatus.OK);
 	}
 
 	@ExceptionHandler(value = UserAuthenticationException.class)

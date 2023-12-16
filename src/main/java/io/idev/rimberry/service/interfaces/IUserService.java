@@ -12,7 +12,9 @@ public interface IUserService<T, L> {
 	
 	T getByEmail(String email);
 	
-	void updateUserWithFields(String username, Map<String, String> fields);
+	void updateUserWithFields(Integer id, Map<String, String> fields);
+	
+	void updateUserWithFields(String email, Map<String, String> fields);
 	
 	List<T> getAll();
 	

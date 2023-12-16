@@ -9,6 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springdoc.core.converters.models.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -58,10 +59,27 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 		}
 		return userDto;
 	}
-
+	
 	@Override
-	public void updateUserWithFields(String username, Map<String, String> fields) {
-		UserDto userDto = getByEmail(username);
+	public void updateUserWithFields(Integer userId, Map<String, String> fields) {
+		UserDto userDto = get(userId);
+		for (Map.Entry<String, String> entry : fields.entrySet()) {
+			switch (entry.getKey()) {
+			case "token":
+				userDto.setToken(entry.getValue());
+				break;
+			case "logged":
+				userDto.setIsLogged(entry.getValue().equalsIgnoreCase("true") ? true : false);
+				break;
+			}
+		}
+		userDto.setUpdated(OffsetDateTime.now());
+		userRepository.saveAndFlush(this.modelMapper.map(userDto, User.class));
+	}
+	
+	@Override
+	public void updateUserWithFields(String email, Map<String, String> fields) {
+		UserDto userDto = getByEmail(email);
 		for (Map.Entry<String, String> entry : fields.entrySet()) {
 			switch (entry.getKey()) {
 			case "token":
@@ -155,9 +173,12 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 		userRepository.saveAndFlush(user);
 	}
 
-	public Page<User> getByPage(int page) {
+	public Page<UserDto> getByPage(int page) {
 		// in case total element < per page element => max page element = total element.
-		return this.userRepository.findAllByisDeletedFalse(PageRequest.of(page, MAx_PER_PAGE));
+		Page<User> pageUser = this.userRepository.findAllByisDeletedFalse(PageRequest.of(page, MAx_PER_PAGE));		
+		return pageUser.map(user -> {
+			return this.modelMapper.map(user, io.idev.storeapi.model.UserDto.class);
+		});
 	}
 
 }

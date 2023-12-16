@@ -181,6 +181,41 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Response'
+   
+  /user/logout/{userId}:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - User Management
+      operationId: logout
+      summary: Logout the current user
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the user to logout
+      responses:
+        '200':
+          description: User Successfully Logged out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Logout the current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
 
 components:
   securitySchemes:
@@ -318,6 +353,27 @@ components:
         roles:
           type: string
           example: ADMIN|STAFF
+    
+    Page:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          example: 1
+        totalPages:
+          type: integer
+          example: 10
+        totalElements:
+          type: integer
+          example: 100
+        content: 
+          type: array
+          items: 
+            $ref: '#/components/schemas/UserDto'
+        hasNext:
+          type: boolean
+          example: 2
+    
     Response:
       type: object
       properties:
@@ -330,4 +386,3 @@ components:
         details:
           type: string
           example: "Exception in thread 'main' java.lang.NullPointerException: Oops!"
-    
