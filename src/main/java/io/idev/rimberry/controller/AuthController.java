@@ -143,7 +143,8 @@ public class AuthController implements UserApi {
 		org.springframework.data.domain.Page<UserDto> userpage = this.userServiceImpl.getByPage(--page);
 		io.idev.storeapi.model.Page pageObject = new io.idev.storeapi.model.Page().currentPage(userpage.getNumber() + 1)
 				.totalPages(userpage.getTotalPages()).content(userpage.getContent())
-				.totalElements(userpage.getNumberOfElements()).hasNext(userpage.hasNext());
+				.totalElements(userpage.getNumberOfElements()).hasNext(userpage.hasNext())
+				.hasPrevious(userpage.hasPrevious());
 		return new ResponseEntity<io.idev.storeapi.model.Page>(pageObject, HttpStatus.OK);
 	}
 

@@ -5,9 +5,11 @@ import lombok.Getter;
 @Getter
 public enum Role {
 	
-	STAFF(0),
+	RECEPTION(0),
 	ADMIN(1),
-	SUPERVISOR(2);
+	SUPERVISOR(2),
+	HR(3);
+	
 	
 	private int role;
 	

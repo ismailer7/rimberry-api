@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import io.idev.rimberry.entities.User;
 import io.idev.rimberry.repos.IUserRepository;
 import io.idev.rimberry.service.interfaces.IUserService;
+import io.idev.rimberry.utils.ImageUtils;
 import io.idev.storapi.enums.Role;
 import io.idev.storeapi.model.UserDto;
 
@@ -30,7 +31,7 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 
 	private ModelMapper modelMapper;
 
-	private static int MAx_PER_PAGE = 2;
+	private static int MAX_PER_PAGE = 5;
 	
 	
 	public UserServiceImpl(IUserRepository userRepository) {
@@ -105,13 +106,16 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 		for (int i = 0; i < arrayRoles.length; i++) {
 			switch (arrayRoles[i]) {
 			case "0":
-				arrayRoles[i] = Role.STAFF.name();
+				arrayRoles[i] = Role.RECEPTION.name();
 				break;
 			case "1":
 				arrayRoles[i] = Role.ADMIN.name();
 				break;
 			case "2":
 				arrayRoles[i] = Role.SUPERVISOR.name();
+				break;
+			case "3":
+				arrayRoles[i] = Role.HR.name();
 				break;
 			}
 		}
@@ -130,12 +134,19 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 	@Override
 	public void edit(UserDto t) {
 		User user = userRepository.findById(t.getId()).get();
-		user.setFirstName(t.getFirstName());
-		user.setLastName(t.getLastName());
+		if(t.getFirstName() != null && !t.getFirstName().isEmpty()) {
+			user.setFirstName(t.getFirstName()); 
+		}
+		if(t.getLastName() != null && !t.getLastName().isEmpty()) {
+			user.setLastName(t.getLastName()); 
+		}
+		if(t.getEmail() != null && !t.getEmail().isEmpty()) {
+			user.setEmail(t.getEmail()); 
+		}
+		if(t.getRoles() != null && !t.getRoles().isEmpty()) {
+			user.setRoles(t.getRoles()); 
+		}
 		user.setUpdated(new Date());
-		user.setEmail(t.getEmail());
-		user.setIsActive(t.getIsActive());
-		user.setRoles(t.getRoles());
 		userRepository.saveAndFlush(user);
 	}
 
@@ -147,8 +158,8 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 		user.setLastName(t.getLastName());
 		user.setEmail(t.getEmail());
 		user.setGender(t.getGender());
-		user.setPassword(pe.encode(t.getPassword()));
-		user.setAvatar(t.getAvatar() != null ? t.getAvatar() : null);
+		user.setPassword(pe.encode(t.getPassword()));		
+		user.setAvatar(ImageUtils.getAvatar());
 		user.setIsActive(true);
 		user.setIsDeleted(false);
 		user.setIsLogged(false);
@@ -175,8 +186,9 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 
 	public Page<UserDto> getByPage(int page) {
 		// in case total element < per page element => max page element = total element.
-		Page<User> pageUser = this.userRepository.findAllByisDeletedFalse(PageRequest.of(page, MAx_PER_PAGE));		
+		Page<User> pageUser = this.userRepository.findAllByisDeletedFalse(PageRequest.of(page, MAX_PER_PAGE));		
 		return pageUser.map(user -> {
+			user.setRoles(getRawRoles(user.getRoles()));
 			return this.modelMapper.map(user, io.idev.storeapi.model.UserDto.class);
 		});
 	}

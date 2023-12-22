@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "STORE_USER")
+@Table(name = "RIMBERRY_USER")
 @Data
 public class User {
 	
@@ -58,8 +58,8 @@ public class User {
 	@Column(name = "GENDER")
 	private String gender;
 	
-	@Column(name = "AVATAR")
-	private String avatar;
+    @Column(name = "AVATAR", length = 1000)
+    private String avatar;
 	
 	@Column(name = "LOGGED")
 	private Boolean isLogged;

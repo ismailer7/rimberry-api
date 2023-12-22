@@ -300,7 +300,28 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/UserDto'
-        
+    
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1212
+        name: 
+          type: string
+          example: framboise
+        created:
+          type: string
+          format: date-time
+          example: null
+        updated:
+          type: string
+          format: date-time
+          example: null
+        isDeleted:
+          type: boolean
+          example: false
+    
     UserDto:
       type: object
       properties:
@@ -372,7 +393,10 @@ components:
             $ref: '#/components/schemas/UserDto'
         hasNext:
           type: boolean
-          example: 2
+          example: False
+        hasPrevious:
+          type: boolean
+          example: True
     
     Response:
       type: object
