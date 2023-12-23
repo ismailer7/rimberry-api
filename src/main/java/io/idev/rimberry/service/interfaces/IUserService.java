@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import io.idev.storeapi.model.UserDto;
+
 public interface IUserService<T, L> {
 
 	T get(L id); 
@@ -23,5 +25,9 @@ public interface IUserService<T, L> {
 	void edit(T t);
 	
 	void delete(L l);
+	
+	Page<UserDto> getByPage(int page);
+	
+	List<T> lookup(String text);
 	
 }

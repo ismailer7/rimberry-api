@@ -51,6 +51,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Response'
     
+  /user/search:
+    get:
+      security:
+        - bearerAuth: []
+      tags: 
+        - User Management
+      operationId: search
+      summary: search users
+      parameters:
+        - in: query
+          name: text
+          description: lookup text
+          required: true
+          schema:
+            type: string
+            example: text
+      responses:
+        '200':
+          description: User List search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDtoList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserDtoList'
+        '500':
+          description: Failed to Find any User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
   /user/getAll:
     get:
       security:
@@ -310,6 +345,9 @@ components:
         name: 
           type: string
           example: framboise
+        pType:
+          type: string
+          example: fruit
         created:
           type: string
           format: date-time
@@ -321,7 +359,40 @@ components:
         isDeleted:
           type: boolean
           example: false
-    
+          
+    SupplierDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 344
+        name:
+          type: string
+          example: ahmed
+        address:
+          type: string
+          example: N 55 LOT SMARA LARACHE
+        cin:
+          type: string
+          example: LA14481
+        rib:
+          type: string
+          example: 1234567891234567
+        source:
+          type: string
+          example: string
+        created:
+          type: string
+          format: date-time
+          example: null
+        updated:
+          type: string
+          format: date-time
+          example: null
+        isDeleted:
+          type: boolean
+          example: false
+          
     UserDto:
       type: object
       properties:

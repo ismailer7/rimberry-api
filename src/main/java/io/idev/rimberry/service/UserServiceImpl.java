@@ -9,7 +9,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springdoc.core.converters.models.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -184,6 +183,7 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 		userRepository.saveAndFlush(user);
 	}
 
+	@Override
 	public Page<UserDto> getByPage(int page) {
 		// in case total element < per page element => max page element = total element.
 		Page<User> pageUser = this.userRepository.findAllByisDeletedFalse(PageRequest.of(page, MAX_PER_PAGE));		
@@ -191,6 +191,25 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 			user.setRoles(getRawRoles(user.getRoles()));
 			return this.modelMapper.map(user, io.idev.storeapi.model.UserDto.class);
 		});
+	}
+
+	@Override
+	public List<UserDto> lookup(String text) {
+		// TODO implement lookup feature and adding criteria.
+		List<User> userList = null;
+		if(text.matches("-?\\d+(\\.\\d+)?")) {
+			userList = this.userRepository.lookupById(Integer.valueOf(text));
+		} else {
+			if(text.contains("@")) {
+				userList = this.userRepository.lookupByEmail(text);
+			} else {
+				userList = this.userRepository.lookupByFirstnameOrLastName(text);
+			}
+		}
+		return userList.stream().map(user -> {
+			user.setRoles(getRawRoles(user.getRoles()));
+			return this.modelMapper.map(user, UserDto.class);
+		}).collect(Collectors.toList());
 	}
 
 }

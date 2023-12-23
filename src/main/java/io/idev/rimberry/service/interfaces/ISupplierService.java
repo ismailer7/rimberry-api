@@ -6,10 +6,10 @@ import org.springframework.data.domain.Page;
 
 import io.idev.storeapi.model.ProductDto;
 
-public interface IProductService<T, L> {
-
-	T get(L id);
+public interface ISupplierService<T, L> {
 	
+	T get(L id);
+
 	T getByName(String name);
 
 	List<T> getAll();
@@ -19,7 +19,6 @@ public interface IProductService<T, L> {
 	void edit(T t);
 
 	void delete(L l);
-	
-	Page<ProductDto> getByPage(int page);
 
+	Page<ProductDto> getByPage(int page);
 }

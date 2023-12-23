@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -146,6 +147,12 @@ public class AuthController implements UserApi {
 				.totalElements(userpage.getNumberOfElements()).hasNext(userpage.hasNext())
 				.hasPrevious(userpage.hasPrevious());
 		return new ResponseEntity<io.idev.storeapi.model.Page>(pageObject, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<List<UserDto>> search(@RequestParam String text) {
+		List<UserDto> response = this.userServiceImpl.lookup(text);
+		return new ResponseEntity<List<UserDto>>(response, HttpStatus.OK);
 	}
 
 	@ExceptionHandler(value = UserAuthenticationException.class)
