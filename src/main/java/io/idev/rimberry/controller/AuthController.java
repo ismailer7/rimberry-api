@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.idev.rimberry.StoreApiConstants;
+import io.idev.rimberry.dto.Page;
 import io.idev.rimberry.exceptions.UserAuthenticationException;
 import io.idev.rimberry.service.AuthService;
 import io.idev.rimberry.service.JwtUserDetailsService;
@@ -140,15 +141,16 @@ public class AuthController implements UserApi {
 	}
 
 	@GetMapping("users")
-	public ResponseEntity<io.idev.storeapi.model.Page> getUsers(@RequestParam int page) {
+	public ResponseEntity<Page<UserDto>> getUsers(@RequestParam int page) {
 		org.springframework.data.domain.Page<UserDto> userpage = this.userServiceImpl.getByPage(--page);
-		io.idev.storeapi.model.Page pageObject = new io.idev.storeapi.model.Page().currentPage(userpage.getNumber() + 1)
+		@SuppressWarnings("unchecked")
+		Page<UserDto> pageObject = new Page<UserDto>().currentPage(userpage.getNumber() + 1)
 				.totalPages(userpage.getTotalPages()).content(userpage.getContent())
 				.totalElements(userpage.getNumberOfElements()).hasNext(userpage.hasNext())
 				.hasPrevious(userpage.hasPrevious());
-		return new ResponseEntity<io.idev.storeapi.model.Page>(pageObject, HttpStatus.OK);
+		return new ResponseEntity<Page<UserDto>>(pageObject, HttpStatus.OK);
 	}
-	
+
 	@Override
 	public ResponseEntity<List<UserDto>> search(@RequestParam String text) {
 		List<UserDto> response = this.userServiceImpl.lookup(text);

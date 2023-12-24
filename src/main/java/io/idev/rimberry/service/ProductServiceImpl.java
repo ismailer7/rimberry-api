@@ -62,9 +62,9 @@ public class ProductServiceImpl implements IProductService<ProductDto, Integer> 
 
 	@Override
 	public void add(ProductDto t) {
-		Product product = Product.builder().name(t.getName()).type(t.getpType()).isDeleted(false).created(new Date())
-				.updated(new Date()).build();
-		this.productRepository.saveAndFlush(product);
+//		Product product = Product.builder().name(t.getName()).type(t.getpType()).isDeleted(false).created(new Date())
+//				.updated(new Date()).build();
+		// this.productRepository.saveAndFlush(product);
 	}
 
 	@Override
@@ -93,6 +93,20 @@ public class ProductServiceImpl implements IProductService<ProductDto, Integer> 
 		return pageProduct.map(product -> {
 			return this.modelMapper.map(product, io.idev.storeapi.model.ProductDto.class);
 		});
+	}
+
+	@Override
+	public List<ProductDto> lookup(String text) {
+		// TODO implement lookup feature and adding criteria.
+		List<Product> productList = null;
+		if (text.matches("-?\\d+(\\.\\d+)?")) {
+			productList = this.productRepository.lookupById(Integer.valueOf(text));
+		} else {
+			productList = this.productRepository.lookupByName(text);
+		}
+		return productList.stream().map(product -> {
+			return this.modelMapper.map(product, ProductDto.class);
+		}).collect(Collectors.toList());
 	}
 
 }

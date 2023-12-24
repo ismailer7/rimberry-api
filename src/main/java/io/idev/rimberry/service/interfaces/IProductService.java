@@ -21,5 +21,7 @@ public interface IProductService<T, L> {
 	void delete(L l);
 	
 	Page<ProductDto> getByPage(int page);
+	
+	List<T> lookup(String text);
 
 }
