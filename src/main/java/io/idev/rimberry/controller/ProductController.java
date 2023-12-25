@@ -21,9 +21,6 @@ import io.idev.rimberry.service.ProductServiceImpl;
 import io.idev.storeapi.api.controller.ProductApi;
 import io.idev.storeapi.model.ProductDto;
 import io.idev.storeapi.model.Response;
-import io.idev.storeapi.model.UserDto;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 
 @RequestMapping(StoreApiConstants.API_BASE_URI)
 @RestController

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Swagger Ecommerce Store API - OpenAPI 3.0
+  title: Swagger Rimberry API - OpenAPI 3.0
   contact:
     email: ismailrzouki7@gmail.com
   license:
@@ -391,6 +391,284 @@ paths:
               schema:
                 $ref: '#/components/schemas/Response'
                    
+  /supplier/add:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Supplier Management
+      operationId: addSupplier
+      summary: add supplier operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierDto'
+        required: true
+      responses:
+        '200':
+          description: Supplier Successfully Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Add New Supplier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
+  /supplier/edit:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Supplier Management
+      operationId: editSupplier
+      summary: Edit Supplier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierDto'
+        required: true
+      responses:
+        '200':
+          description: Supplier Successfully Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Edit supplier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /supplier/delete/{supplierId}:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Supplier Management
+      operationId: deleteSupplier
+      summary: Delete specific supplier
+      parameters:
+        - in: path
+          name: supplierId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the supplier to delete
+      responses:
+        '200':
+          description: Supplier Successfully Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Delete product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /supplier/search:
+    get:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Supplier Management
+      operationId: searchSupplier
+      summary: search supplier
+      parameters:
+        - in: query
+          name: text
+          description: lookup text
+          required: true
+          schema:
+            type: string
+            example: text
+      responses:
+        '200':
+          description: Supplier List search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierDtoList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SupplierDtoList'
+        '500':
+          description: Failed to Find any Supplier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /factory/add:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Factory Management
+      operationId: addFactory
+      summary: add factory operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FactoryDto'
+        required: true
+      responses:
+        '200':
+          description: Factory Successfully Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Add New Factory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
+  /factory/edit:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Factory Management
+      operationId: editFactory
+      summary: Edit Factory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FactoryDto'
+        required: true
+      responses:
+        '200':
+          description: Factory Successfully Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Edit factory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /factory/delete/{factoryId}:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Factory Management
+      operationId: deleteFactory
+      summary: Delete specific factory
+      parameters:
+        - in: path
+          name: factoryId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the factory to delete
+      responses:
+        '200':
+          description: Factory Successfully Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Delete factory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /factory/search:
+    get:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Factory Management
+      operationId: searchFactory
+      summary: search factory
+      parameters:
+        - in: query
+          name: text
+          description: lookup text
+          required: true
+          schema:
+            type: string
+            example: text
+      responses:
+        '200':
+          description: factory List search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FactoryDtoList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/FactoryDtoList'
+        '500':
+          description: Failed to Find any Factory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+                                
 components:
   securitySchemes:
     bearerAuth:
@@ -537,6 +815,40 @@ components:
           type: boolean
           example: false
           
+    SupplierDtoList:
+      type: array
+      items:
+        $ref: '#/components/schemas/SupplierDto'    
+    
+    FactoryDtoList:
+      type: array
+      items:
+        $ref: '#/components/schemas/FactoryDto'
+    
+    FactoryDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1212
+        name: 
+          type: string
+          example: azemour
+        location:
+          type: string
+          example: souk larbaa 55
+        created:
+          type: string
+          format: date-time
+          example: null
+        updated:
+          type: string
+          format: date-time
+          example: null
+        isDeleted:
+          type: boolean
+          example: false
+              
     UserDto:
       type: object
       properties:
