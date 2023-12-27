@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import io.idev.storeapi.model.ProductDto;
-
-public interface ISupplierService<T, L> {
+public interface IFactoryService<T, L> {
 	
 	T get(L id);
 
@@ -21,4 +19,6 @@ public interface ISupplierService<T, L> {
 	void delete(L l);
 
 	Page<T> getByPage(int page);
+	
+	List<T> lookup(String text);
 }

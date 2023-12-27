@@ -97,11 +97,11 @@ public class SupplierServiceImpl implements ISupplierService<SupplierDto, Intege
 	}
 
 	@Override
-	public Page<ProductDto> getByPage(int page) {
+	public Page<SupplierDto> getByPage(int page) {
 		Page<Supplier> pageSupplier = this.supplierRepository
 				.findAllByisDeletedFalse(PageRequest.of(page, MAX_PER_PAGE));
 		return pageSupplier.map(supplier -> {
-			return this.modelMapper.map(supplier, io.idev.storeapi.model.ProductDto.class);
+			return this.modelMapper.map(supplier, io.idev.storeapi.model.SupplierDto.class);
 		});
 	}
 

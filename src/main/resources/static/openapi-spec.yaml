@@ -848,6 +848,32 @@ components:
         isDeleted:
           type: boolean
           example: false
+        owner: 
+          $ref: '#/components/schemas/OwnerDto'
+          
+    OwnerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1212
+        fullname:
+          type: string
+          example: ahmed ahmed
+        email:
+          type: string
+          example: ahmed@gmail.com
+        phone:
+          type: string
+          example: +212654741162
+        created:
+          type: string
+          format: date-time
+          example: null
+        updated:
+          type: string
+          format: date-time
+          example: null
               
     UserDto:
       type: object

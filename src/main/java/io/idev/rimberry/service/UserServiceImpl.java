@@ -195,7 +195,6 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 
 	@Override
 	public List<UserDto> lookup(String text) {
-		// TODO implement lookup feature and adding criteria.
 		List<User> userList = null;
 		if(text.matches("-?\\d+(\\.\\d+)?")) {
 			userList = this.userRepository.lookupById(Integer.valueOf(text));
