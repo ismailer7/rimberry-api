@@ -26,6 +26,6 @@ public interface IFactoryRepository extends JpaRepository<Factory, Integer> {
 	@Query("SELECT u FROM Factory u WHERE u.location like %?1%")
 	List<Factory> lookupByLocation(String text);
 	
-	Factory findByOwnerId(Integer ownerId);
+	Factory findByOwnerOwnerId(Integer ownerId);
 
 }

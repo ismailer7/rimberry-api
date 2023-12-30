@@ -5,19 +5,25 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "FACTORY")
 public class Factory {
 
@@ -32,6 +38,13 @@ public class Factory {
 	@Column(name = "FACTORY_LOCATION")
 	private String location;
 	
+	@Column(name = "STATUS")
+	private int status;
+	
+	@Column(name = "WORKING_HOURS")
+	@Builder.Default
+	private String wh = "8AM - 6PM";
+	
 	@Column(name = "CREATED")
 	private Date created;
 	
@@ -41,7 +54,7 @@ public class Factory {
 	@Column(name = "DELETED")
 	private boolean isDeleted;
 	
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="owner_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="ownerId")
 	private FactoryOwner owner;
 }

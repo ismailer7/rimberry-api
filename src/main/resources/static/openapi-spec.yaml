@@ -668,7 +668,35 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Response'
-                                
+   
+  /factory/all:
+    get:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Factory Management
+      operationId: getFactories
+      summary: get all factories
+      responses:
+        '200':
+          description: factory List
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FactoryDtoList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/FactoryDtoList'
+        '500':
+          description: Failed to Find any Factory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
 components:
   securitySchemes:
     bearerAuth:
@@ -837,6 +865,12 @@ components:
         location:
           type: string
           example: souk larbaa 55
+        status:
+           type: string
+           example: Open
+        wh:
+           type: string
+           example: 8AM - 6PM
         created:
           type: string
           format: date-time
@@ -866,6 +900,9 @@ components:
         phone:
           type: string
           example: +212654741162
+        location:
+           type: string
+           example: LOT SMARA LARACHE N 55
         created:
           type: string
           format: date-time

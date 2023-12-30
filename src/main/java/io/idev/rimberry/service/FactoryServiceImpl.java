@@ -9,14 +9,17 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import io.idev.rimberry.entities.Factory;
 import io.idev.rimberry.entities.FactoryOwner;
 import io.idev.rimberry.repos.IFactoryOwnerRepository;
 import io.idev.rimberry.repos.IFactoryRepository;
 import io.idev.rimberry.service.interfaces.IFactoryService;
+import io.idev.storapi.enums.FactoryStatus;
 import io.idev.storeapi.model.FactoryDto;
 
+@Service
 public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> {
 
 	private IFactoryRepository factoryRepository;
@@ -59,14 +62,30 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 	public List<FactoryDto> getAll() {
 		List<Factory> factoryList = this.factoryRepository.findAll();
 		return factoryList.stream().filter(factory -> !factory.isDeleted()).map(factory -> {
-			return this.modelMapper.map(factory, io.idev.storeapi.model.FactoryDto.class);
+			FactoryDto factoryDto = this.modelMapper.map(factory, io.idev.storeapi.model.FactoryDto.class);
+			factoryDto.setStatus(getRawStatus(factory.getStatus()));
+			return factoryDto;
 		}).collect(Collectors.toList());
+	}
+
+	private String getRawStatus(int status) {
+		switch (status) {
+		case 0:
+			return FactoryStatus.INACTIVE.name();
+		case 1:
+			return FactoryStatus.OPEN.name();
+		case 2:
+			return FactoryStatus.CLOSED.name();
+		default:
+			return "N/A";
+		}
 	}
 
 	@Override
 	public void add(FactoryDto t) {
+		FactoryOwner fo = FactoryOwner.builder().email(t.getOwner().getEmail()).fullname(t.getOwner().getFullname()).phone(t.getOwner().getPhone()).location(t.getOwner().getLocation()).build();
 		Factory factory = Factory.builder().name(t.getName()).location(t.getLocation()).created(new Date())
-				.updated(new Date()).build();
+				.updated(new Date()).owner(fo).build();
 		this.factoryRepository.saveAndFlush(factory);
 	}
 
@@ -109,8 +128,8 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 				// lookup by owner email.
 				List<FactoryOwner> owners = this.factoryOwnerRepository.lookupByEmail(text);
 				lookupResult = owners.stream().map(owner -> {
-					Integer ownerId = owner.getId();
-					Factory factory = this.factoryRepository.findByOwnerId(ownerId);
+					Integer ownerId = owner.getOwnerId();
+					Factory factory = this.factoryRepository.findByOwnerOwnerId(ownerId);
 					return factory;
 				}).collect(Collectors.toList());
 			} else {
@@ -119,8 +138,8 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 					// lookup by owner name
 					List<FactoryOwner> owners = this.factoryOwnerRepository.lookupByName(text);
 					lookupResult = owners.stream().map(owner -> {
-						Integer ownerId = owner.getId();
-						Factory factory = this.factoryRepository.findByOwnerId(ownerId);
+						Integer ownerId = owner.getOwnerId();
+						Factory factory = this.factoryRepository.findByOwnerOwnerId(ownerId);
 						return factory;
 					}).collect(Collectors.toList());
 				}
