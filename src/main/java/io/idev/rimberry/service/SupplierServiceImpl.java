@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import io.idev.rimberry.entities.Supplier;
 import io.idev.rimberry.repos.ISupplierRepository;
@@ -16,6 +17,7 @@ import io.idev.rimberry.service.interfaces.ISupplierService;
 import io.idev.storeapi.model.ProductDto;
 import io.idev.storeapi.model.SupplierDto;
 
+@Service
 public class SupplierServiceImpl implements ISupplierService<SupplierDto, Integer> {
 
 	private ISupplierRepository supplierRepository;

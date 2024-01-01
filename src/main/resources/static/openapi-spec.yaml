@@ -795,7 +795,7 @@ components:
         name: 
           type: string
           example: framboise
-        pType:
+        type:
           type: string
           example: fruit
         created:
@@ -822,6 +822,12 @@ components:
         address:
           type: string
           example: N 55 LOT SMARA LARACHE
+        email:
+           type: string
+           example: a.errati@rimberry.ma
+        phone:
+           type: string
+           example: +212654741162
         cin:
           type: string
           example: LA14481

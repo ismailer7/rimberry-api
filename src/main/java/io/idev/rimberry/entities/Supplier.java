@@ -12,10 +12,12 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "SUPPLIER")
 public class Supplier {
@@ -30,6 +32,12 @@ public class Supplier {
 	
 	@Column(name = "SUPPLIER_ADDRESS")
 	private String address;
+	
+	@Column(name = "SUPPLIER_EMAIL")
+	private String email;
+	
+	@Column(name = "SUPPLIER_PHONE")
+	private String phone;
 	
 	@Column(name = "SUPPLIER_CIN")
 	private String cin;

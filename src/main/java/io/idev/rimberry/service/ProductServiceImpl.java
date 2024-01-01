@@ -73,8 +73,8 @@ public class ProductServiceImpl implements IProductService<ProductDto, Integer> 
 		if (t.getName() != null && !t.getName().isEmpty()) {
 			product.setName(t.getName());
 		}
-		if (t.getpType() != null && !t.getpType().isEmpty()) {
-			product.setType(t.getpType());
+		if (t.getType() != null && !t.getType().isEmpty()) {
+			product.setType(t.getType());
 		}
 		product.setUpdated(new Date());
 		this.productRepository.saveAndFlush(product);
