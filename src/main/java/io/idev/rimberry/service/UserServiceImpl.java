@@ -159,7 +159,7 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 		user.setGender(t.getGender());
 		user.setPassword(pe.encode(t.getPassword()));		
 		user.setAvatar(ImageUtils.getAvatar());
-		user.setIsActive(true);
+		user.setIsActive(t.getIsActive());
 		user.setIsDeleted(false);
 		user.setIsLogged(false);
 		user.setCreated(new Date());
@@ -205,7 +205,8 @@ public class UserServiceImpl implements IUserService<UserDto, Integer> {
 				userList = this.userRepository.lookupByFirstnameOrLastName(text);
 			}
 		}
-		return userList.stream().map(user -> {
+		
+		return userList.stream().filter(user -> !user.getIsDeleted()).map(user -> {
 			user.setRoles(getRawRoles(user.getRoles()));
 			return this.modelMapper.map(user, UserDto.class);
 		}).collect(Collectors.toList());

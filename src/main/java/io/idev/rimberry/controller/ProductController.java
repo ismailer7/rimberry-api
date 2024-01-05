@@ -62,7 +62,7 @@ public class ProductController implements ProductApi {
 	@Override
 	public ResponseEntity<Response> deleteProduct(@PathVariable("productId") Integer productId) {
 		this.productServiceImpl.delete(productId);
-		Response response = new Response().code(200).message(String.format("Product with ID %d Deleted", productId))
+		Response response = new Response().code(200).message(String.format("Product with ID [%d] is Deleted", productId))
 				.details(null);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}

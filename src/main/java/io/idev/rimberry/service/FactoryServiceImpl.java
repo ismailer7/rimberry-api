@@ -83,7 +83,8 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 
 	@Override
 	public void add(FactoryDto t) {
-		FactoryOwner fo = FactoryOwner.builder().email(t.getOwner().getEmail()).fullname(t.getOwner().getFullname()).phone(t.getOwner().getPhone()).location(t.getOwner().getLocation()).build();
+		FactoryOwner fo = FactoryOwner.builder().email(t.getOwner().getEmail()).fullname(t.getOwner().getFullname())
+				.phone(t.getOwner().getPhone()).location(t.getOwner().getLocation()).build();
 		Factory factory = Factory.builder().name(t.getName()).location(t.getLocation()).created(new Date())
 				.updated(new Date()).owner(fo).build();
 		this.factoryRepository.saveAndFlush(factory);
@@ -97,6 +98,21 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 		}
 		if (t.getLocation() != null && !t.getLocation().isEmpty()) {
 			factory.setLocation(t.getLocation());
+		}
+		if (t.getStatus() != null && !t.getStatus().isEmpty()) {
+			factory.setStatus(t.getStatus().equals("ACTIVE") ? 0 : -1);
+		}
+		if (t.getOwner() != null && t.getOwner().getFullname() != null && !t.getOwner().getFullname().isEmpty()) {
+			factory.getOwner().setFullname(t.getOwner().getFullname());
+		}
+		if (t.getOwner() != null && t.getOwner().getEmail() != null && !t.getOwner().getEmail().isEmpty()) {
+			factory.getOwner().setEmail(t.getOwner().getEmail());
+		}
+		if (t.getOwner() != null && t.getOwner().getLocation() != null && !t.getOwner().getLocation().isEmpty()) {
+			factory.getOwner().setLocation(t.getOwner().getLocation());
+		}
+		if (t.getOwner() != null && t.getOwner().getPhone() != null && !t.getOwner().getPhone().isEmpty()) {
+			factory.getOwner().setPhone(t.getOwner().getPhone());
 		}
 		factory.setUpdated(new Date());
 		this.factoryRepository.saveAndFlush(factory);
@@ -148,7 +164,7 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 				}
 			}
 		}
-		return lookupResult.stream().map(factory -> {
+		return lookupResult.stream().filter(factory -> !factory.isDeleted()).map(factory -> {
 			return this.modelMapper.map(factory, FactoryDto.class);
 		}).collect(Collectors.toList());
 	}

@@ -34,7 +34,7 @@ public class FactoryController implements FactoryApi {
 	@Override
 	public ResponseEntity<Response> addFactory(@Valid FactoryDto factoryDto) {
 		this.factoryServiceImpl.add(factoryDto);
-		Response response = new Response().code(200).message("Factory Added!").details(null);
+		Response response = new Response().code(200).message("New Factory Added!").details(null);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 	
@@ -52,21 +52,22 @@ public class FactoryController implements FactoryApi {
 	@Override
 	public ResponseEntity<Response> deleteFactory(Integer factoryId) {
 		this.factoryServiceImpl.delete(factoryId);
-		Response response = new Response().code(200).message(String.format("Factory with ID %d Deleted", factoryId))
+		Response response = new Response().code(200).message(String.format("Factory with ID [%d] is Deleted", factoryId))
 				.details(null);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Response> editFactory(@Valid FactoryDto factoryDto) {
-		// TODO Auto-generated method stub
-		return FactoryApi.super.editFactory(factoryDto);
+		this.factoryServiceImpl.edit(factoryDto);
+		Response response = new Response().code(200).message("Factory Has Been Updated");
+		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<List<FactoryDto>> searchFactory(@NotNull @Valid String text) {
-		// TODO Auto-generated method stub
-		return FactoryApi.super.searchFactory(text);
+		List<FactoryDto> lookupResult = this.factoryServiceImpl.lookup(text);
+		return new ResponseEntity<List<FactoryDto>>(lookupResult, HttpStatus.OK);
 	}
 
 }

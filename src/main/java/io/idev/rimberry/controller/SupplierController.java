@@ -63,7 +63,7 @@ public class SupplierController implements SupplierApi {
 	@Override
 	public ResponseEntity<Response> deleteSupplier(Integer supplierId) {
 		this.supplierServiceImpl.delete(supplierId);
-		Response response = new Response().code(200).message(String.format("Supplier with ID %d Deleted", supplierId))
+		Response response = new Response().code(200).message(String.format("Supplier with ID [%d] is Deleted", supplierId))
 				.details(null);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
