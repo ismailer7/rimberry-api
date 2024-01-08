@@ -100,7 +100,7 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 			factory.setLocation(t.getLocation());
 		}
 		if (t.getStatus() != null && !t.getStatus().isEmpty()) {
-			factory.setStatus(t.getStatus().equals("ACTIVE") ? 0 : -1);
+			factory.setStatus(Integer.valueOf(t.getStatus()));
 		}
 		if (t.getOwner() != null && t.getOwner().getFullname() != null && !t.getOwner().getFullname().isEmpty()) {
 			factory.getOwner().setFullname(t.getOwner().getFullname());
@@ -130,7 +130,19 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 	public Page<FactoryDto> getByPage(int page) {
 		Page<Factory> pageFactory = this.factoryRepository.findAllByisDeletedFalse(PageRequest.of(page, MAX_PER_PAGE));
 		return pageFactory.map(factory -> {
-			return this.modelMapper.map(factory, io.idev.storeapi.model.FactoryDto.class);
+			FactoryDto factoryDto = this.modelMapper.map(factory, io.idev.storeapi.model.FactoryDto.class);
+			switch (factory.getStatus()) {
+			case 0:
+				factoryDto.setStatus("INACTIVE");
+				break;
+			case 1:
+				factoryDto.setStatus("OPEN");
+				break;
+			case 2:
+				factoryDto.setStatus("CLOSED");
+				break;
+			}
+			return factoryDto;
 		});
 	}
 

@@ -44,8 +44,9 @@ public class SupplierController implements SupplierApi {
 
 	@Override
 	public ResponseEntity<Response> addSupplier(@Valid SupplierDto supplierDto) {
-		// TODO Auto-generated method stub
-		return SupplierApi.super.addSupplier(supplierDto);
+		this.supplierServiceImpl.add(supplierDto);
+		Response response = new Response().code(200).message("New Supplier Added!").details(null);
+		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 
 	

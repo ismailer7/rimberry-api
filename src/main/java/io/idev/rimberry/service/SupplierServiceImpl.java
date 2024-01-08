@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import io.idev.rimberry.entities.Supplier;
 import io.idev.rimberry.repos.ISupplierRepository;
 import io.idev.rimberry.service.interfaces.ISupplierService;
-import io.idev.storeapi.model.ProductDto;
 import io.idev.storeapi.model.SupplierDto;
 
 @Service
@@ -64,7 +63,8 @@ public class SupplierServiceImpl implements ISupplierService<SupplierDto, Intege
 	@Override
 	public void add(SupplierDto t) {
 		Supplier supplier = Supplier.builder().name(t.getName()).address(t.getAddress()).cin(t.getCin()).rib(t.getRib())
-				.source(t.getSource()).isDeleted(false).updated(new Date()).created(new Date()).build();
+				.email(t.getEmail()).phone(t.getPhone()).source(t.getSource()).isDeleted(false).updated(new Date())
+				.created(new Date()).build();
 		this.supplierRepository.saveAndFlush(supplier);
 	}
 
