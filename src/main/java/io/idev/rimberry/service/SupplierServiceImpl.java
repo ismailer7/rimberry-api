@@ -77,6 +77,12 @@ public class SupplierServiceImpl implements ISupplierService<SupplierDto, Intege
 		if (t.getAddress() != null && !t.getAddress().isEmpty()) {
 			supplier.setAddress(t.getAddress());
 		}
+		if (t.getEmail() != null && !t.getEmail().isEmpty()) {
+			supplier.setEmail(t.getEmail());
+		}
+		if (t.getPhone() != null && !t.getPhone().isEmpty()) {
+			supplier.setPhone(t.getPhone());
+		}
 		if (t.getCin() != null && !t.getCin().isEmpty()) {
 			supplier.setCin(t.getCin());
 		}
@@ -105,6 +111,36 @@ public class SupplierServiceImpl implements ISupplierService<SupplierDto, Intege
 		return pageSupplier.map(supplier -> {
 			return this.modelMapper.map(supplier, io.idev.storeapi.model.SupplierDto.class);
 		});
+	}
+
+	@Override
+	public List<SupplierDto> lookup(String text) {
+		List<Supplier> lookupResult = null;
+		if (text.matches("-?\\d+(\\.\\d+)?")) {
+			lookupResult = this.supplierRepository.lookupById(Integer.valueOf(text));
+			// lookup by phone
+			if (lookupResult == null || lookupResult.isEmpty()) {
+				// lookup by phone
+				lookupResult = this.supplierRepository.lookupByPhone(text);
+			}
+			if (lookupResult == null || lookupResult.isEmpty()) {
+				lookupResult = this.supplierRepository.lookupByRib(text);
+			}
+		} else {
+			if (text.contains("@")) {
+				// lookup by email.
+				lookupResult = this.supplierRepository.lookupByEmail(text);
+			} else {
+				lookupResult = this.supplierRepository.lookupByCin(text);
+				// lookup by address
+				if (lookupResult == null || lookupResult.isEmpty()) {
+					lookupResult = this.supplierRepository.lookupByAddress(text);
+				}
+			}
+		}
+		return lookupResult.stream().filter(supplier -> !supplier.isDeleted()).map(supplier -> {
+			return this.modelMapper.map(supplier, io.idev.storeapi.model.SupplierDto.class);
+		}).collect(Collectors.toList());
 	}
 
 }

@@ -20,6 +20,7 @@ import io.idev.rimberry.StoreApiConstants;
 import io.idev.rimberry.dto.Page;
 import io.idev.rimberry.service.SupplierServiceImpl;
 import io.idev.storeapi.api.controller.SupplierApi;
+import io.idev.storeapi.model.FactoryDto;
 import io.idev.storeapi.model.ProductDto;
 import io.idev.storeapi.model.Response;
 import io.idev.storeapi.model.SupplierDto;
@@ -71,14 +72,15 @@ public class SupplierController implements SupplierApi {
 
 	@Override
 	public ResponseEntity<Response> editSupplier(@Valid SupplierDto supplierDto) {
-		// TODO Auto-generated method stub
-		return SupplierApi.super.editSupplier(supplierDto);
+		this.supplierServiceImpl.edit(supplierDto);
+		Response response = new Response().code(200).message("Supplier Has Been Updated");
+		return new ResponseEntity<Response>(response, HttpStatus.OK); 
 	}
 
 	@Override
 	public ResponseEntity<List<SupplierDto>> searchSupplier(@NotNull @Valid String text) {
-		// TODO Auto-generated method stub
-		return SupplierApi.super.searchSupplier(text);
+		List<SupplierDto> lookupResult = this.supplierServiceImpl.lookup(text);
+		return new ResponseEntity<List<SupplierDto>>(lookupResult, HttpStatus.OK);
 	}
 
 }

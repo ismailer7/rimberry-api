@@ -21,4 +21,6 @@ public interface ISupplierService<T, L> {
 	void delete(L l);
 
 	Page<T> getByPage(int page);
+	
+	List<T> lookup(String text);
 }
