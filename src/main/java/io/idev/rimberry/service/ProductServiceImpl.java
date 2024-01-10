@@ -1,5 +1,6 @@
 package io.idev.rimberry.service;
 
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -62,9 +63,9 @@ public class ProductServiceImpl implements IProductService<ProductDto, Integer> 
 
 	@Override
 	public void add(ProductDto t) {
-//		Product product = Product.builder().name(t.getName()).type(t.getpType()).isDeleted(false).created(new Date())
-//				.updated(new Date()).build();
-		// this.productRepository.saveAndFlush(product);
+		Product product = Product.builder().name(t.getName()).type(t.getType()).isDeleted(false).created(new Date())
+				.updated(new Date()).build();
+		 this.productRepository.saveAndFlush(product);
 	}
 
 	@Override
@@ -91,7 +92,32 @@ public class ProductServiceImpl implements IProductService<ProductDto, Integer> 
 	public Page<ProductDto> getByPage(int page) {
 		Page<Product> pageProduct = this.productRepository.findAllByisDeletedFalse(PageRequest.of(page, MAX_PER_PAGE));
 		return pageProduct.map(product -> {
-			return this.modelMapper.map(product, io.idev.storeapi.model.ProductDto.class);
+			ProductDto productDto = this.modelMapper.map(product, io.idev.storeapi.model.ProductDto.class);
+			productDto.setCreated(product.getCreated()!=null ? product.getCreated().toInstant().atOffset(ZoneOffset.UTC): null);
+			switch(productDto.getType()) {
+				case "0":
+					productDto.setType("FRAMBOISE");
+					break;
+				case "1":
+					productDto.setType("MURE");
+					break;
+				case "2":
+					productDto.setType("MYRTILLE");
+					break;
+				case "3":
+					productDto.setType("FRAISE");
+					break;
+				case "4":
+					productDto.setType("POIVRON GREEN");
+					break;
+				case "5":
+					productDto.setType("POIVRON RED");
+					break;
+				case "6":
+					productDto.setType("POIVRON YELLOW");
+					break;
+			}
+			return productDto;
 		});
 	}
 

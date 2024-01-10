@@ -9,13 +9,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import io.idev.storeapi.model.ProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "PRODUCT")
 public class Product {
 
@@ -38,4 +42,5 @@ public class Product {
 	
 	@Column(name = "ISDELETED")
 	private boolean isDeleted;
+
 }
