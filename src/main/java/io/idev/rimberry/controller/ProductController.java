@@ -53,6 +53,14 @@ public class ProductController implements ProductApi {
 	}
 	
 	@Override
+	public ResponseEntity<List<ProductDto>> allProducts() {
+		List<ProductDto> productList = this.productServiceImpl.getAll();
+		return new ResponseEntity<List<ProductDto>>(productList, HttpStatus.OK);
+	}
+	
+	
+	
+	@Override
 	public ResponseEntity<Response> editProduct(@Valid @RequestBody ProductDto productPayload) {
 		this.productServiceImpl.edit(productPayload);
 		Response response = new Response().code(200).message("Product Has Been Updated");

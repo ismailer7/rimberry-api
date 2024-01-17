@@ -218,7 +218,7 @@ paths:
                 $ref: '#/components/schemas/Response'
    
   /user/logout/{userId}:
-    put:
+    get:
       security:
         - bearerAuth: []
       tags:
@@ -390,6 +390,34 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Response'
+
+  /product/all:
+    get:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Product Management
+      operationId: allProducts
+      summary: all products
+      responses:
+        '200':
+          description: Product List
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDtoList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ProductDtoList'
+        '500':
+          description: Failed to Find any Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
                    
   /supplier/add:
     post:
@@ -513,6 +541,34 @@ paths:
       responses:
         '200':
           description: Supplier List search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierDtoList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SupplierDtoList'
+        '500':
+          description: Failed to Find any Supplier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+   
+  /supplier/all:
+    get:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Supplier Management
+      operationId: allSuppliers
+      summary: all suppliers
+      responses:
+        '200':
+          description: All Supplier List
           content:
             application/json:
               schema:
@@ -716,6 +772,9 @@ components:
     Token:
       type: object
       properties:
+        userId:
+           type: integer
+           example: 1221
         token:
           type: string
           example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0IiwiYXVkIjpbImFkbWluIl0sImlzcyI6Im1hc29uLm1ldGFtdWcubmV0IiwiZXhwIjoxNTc0NTEyNzY1LCJpYXQiOjE1NjY3MzY3NjUsImp0aSI6ImY3YmZlMzNmLTdiZjctNGViNC04ZTU5LTk5MTc5OWI1ZWI4YSJ9.EVcCaSqrSNVs3cWdLt-qkoqUk7rPHEOsDHS8yejwxMw"

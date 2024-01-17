@@ -85,7 +85,7 @@ public class FactoryServiceImpl implements IFactoryService<FactoryDto, Integer> 
 	public void add(FactoryDto t) {
 		FactoryOwner fo = FactoryOwner.builder().email(t.getOwner().getEmail()).fullname(t.getOwner().getFullname())
 				.phone(t.getOwner().getPhone()).location(t.getOwner().getLocation()).build();
-		Factory factory = Factory.builder().name(t.getName()).location(t.getLocation()).created(new Date())
+		Factory factory = Factory.builder().name(t.getName()).location(t.getLocation()).created(new Date()).status(Integer.valueOf(t.getStatus()))
 				.updated(new Date()).owner(fo).build();
 		this.factoryRepository.saveAndFlush(factory);
 	}

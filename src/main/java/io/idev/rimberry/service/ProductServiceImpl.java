@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import io.idev.rimberry.entities.Product;
 import io.idev.rimberry.repos.IProductRepository;
 import io.idev.rimberry.service.interfaces.IProductService;
+import io.idev.storapi.enums.ProductType;
 import io.idev.storeapi.model.ProductDto;
 
 @Service
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements IProductService<ProductDto, Integer> 
 	public void add(ProductDto t) {
 		Product product = Product.builder().name(t.getName()).type(t.getType()).isDeleted(false).created(new Date())
 				.updated(new Date()).build();
-		 this.productRepository.saveAndFlush(product);
+		this.productRepository.saveAndFlush(product);
 	}
 
 	@Override
@@ -93,29 +94,30 @@ public class ProductServiceImpl implements IProductService<ProductDto, Integer> 
 		Page<Product> pageProduct = this.productRepository.findAllByisDeletedFalse(PageRequest.of(page, MAX_PER_PAGE));
 		return pageProduct.map(product -> {
 			ProductDto productDto = this.modelMapper.map(product, io.idev.storeapi.model.ProductDto.class);
-			productDto.setCreated(product.getCreated()!=null ? product.getCreated().toInstant().atOffset(ZoneOffset.UTC): null);
-			switch(productDto.getType()) {
-				case "0":
-					productDto.setType("FRAMBOISE");
-					break;
-				case "1":
-					productDto.setType("MURE");
-					break;
-				case "2":
-					productDto.setType("MYRTILLE");
-					break;
-				case "3":
-					productDto.setType("FRAISE");
-					break;
-				case "4":
-					productDto.setType("POIVRON GREEN");
-					break;
-				case "5":
-					productDto.setType("POIVRON RED");
-					break;
-				case "6":
-					productDto.setType("POIVRON YELLOW");
-					break;
+			productDto.setCreated(
+					product.getCreated() != null ? product.getCreated().toInstant().atOffset(ZoneOffset.UTC) : null);
+			switch (productDto.getType()) {
+			case "0":
+				productDto.setType("FRAMBOISE");
+				break;
+			case "1":
+				productDto.setType("MURE");
+				break;
+			case "2":
+				productDto.setType("MYRTILLE");
+				break;
+			case "3":
+				productDto.setType("FRAISE");
+				break;
+			case "4":
+				productDto.setType("POIVRON GREEN");
+				break;
+			case "5":
+				productDto.setType("POIVRON RED");
+				break;
+			case "6":
+				productDto.setType("POIVRON YELLOW");
+				break;
 			}
 			return productDto;
 		});
@@ -129,6 +131,30 @@ public class ProductServiceImpl implements IProductService<ProductDto, Integer> 
 			productList = this.productRepository.lookupById(Integer.valueOf(text));
 		} else {
 			productList = this.productRepository.lookupByName(text);
+			if(productList == null || productList.isEmpty()) {
+				//productList = this.productRepository.lookupByType(text);
+				if(ProductType.FRAAMBOISE.name().contains(text)) {
+					productList = this.productRepository.lookupByType(ProductType.FRAAMBOISE.ordinal());
+				}
+				if(ProductType.FRAISE.name().contains(text)) {
+					productList = this.productRepository.lookupByType(ProductType.FRAISE.ordinal());
+								}
+				if(ProductType.MURE.name().contains(text)) {
+					productList = this.productRepository.lookupByType(ProductType.MURE.ordinal());
+				}
+				if(ProductType.MYRTILLE.name().contains(text)) {
+					productList = this.productRepository.lookupByType(ProductType.MYRTILLE.ordinal());
+				}
+				if(ProductType.POIVRON_GREEN.name().contains(text)) {
+					productList = this.productRepository.lookupByType(ProductType.POIVRON_GREEN.ordinal());
+				}
+				if(ProductType.POIVRON_RED.name().contains(text)) {
+					productList = this.productRepository.lookupByType(ProductType.POIVRON_RED.ordinal());
+				}
+				if(ProductType.POIVRON_YELLOW.name().contains(text)) {
+					productList = this.productRepository.lookupByType(ProductType.POIVRON_YELLOW.ordinal());
+				}
+			}
 		}
 		return productList.stream().map(product -> {
 			return this.modelMapper.map(product, ProductDto.class);

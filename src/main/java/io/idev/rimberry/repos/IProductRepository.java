@@ -22,4 +22,7 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
 	
 	@Query("SELECT u FROM Product u WHERE u.name like %?1%")
 	List<Product> lookupByName(String text);
+	
+	@Query("SELECT u FROM Product u WHERE u.type = ?1")
+	List<Product> lookupByType(int text);
 }

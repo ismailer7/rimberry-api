@@ -50,6 +50,11 @@ public class SupplierController implements SupplierApi {
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 
+	@Override
+	public ResponseEntity<List<SupplierDto>> allSuppliers() {
+		List<SupplierDto> supplierList = this.supplierServiceImpl.getAll();
+		return new ResponseEntity<List<SupplierDto>>(supplierList, HttpStatus.OK);
+	}
 	
 	@GetMapping("/supplier/suppliers")
 	public ResponseEntity<Page<SupplierDto>> getProducts(@RequestParam int page) {

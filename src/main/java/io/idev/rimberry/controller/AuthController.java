@@ -91,7 +91,7 @@ public class AuthController implements UserApi {
 			}
 		});
 		UserDto currentUser = userServiceImpl.getByEmail(cred.getEmail());
-		Token response = new Token().token(token).expiration(authService.getExipartion(token))
+		Token response = new Token().userId(currentUser.getId()).token(token).expiration(authService.getExipartion(token))
 				.roles(userServiceImpl.getUserRolesByEmail(cred.getEmail())).gender(currentUser.getGender())
 				.firstname(currentUser.getFirstName()).lastname(currentUser.getLastName())
 				.username(currentUser.getUserName());
