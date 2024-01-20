@@ -753,6 +753,69 @@ paths:
               schema:
                 $ref: '#/components/schemas/Response'
                 
+                
+  /receipt/all:
+    get:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Receipt Management
+      operationId: getReceipts
+      summary: get all receipts
+      responses:
+        '200':
+          description: receipt List
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptDtoList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ReceiptDtoList'
+        '500':
+          description: Failed to Find any Receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /receipt/add:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Receipt Management
+      operationId: addReceipt
+      summary: add receipt operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptDto'
+        required: true
+      responses:
+        '200':
+          description: Receipt Successfully Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '500':
+          description: Failed to Add New Receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Response'
+            
 components:
   securitySchemes:
     bearerAuth:
@@ -976,7 +1039,49 @@ components:
           type: string
           format: date-time
           example: null
-              
+    
+    ReceiptDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1212
+        date: 
+          type: string
+          example: 15/01/2023
+        supplierId:
+          type: integer
+          example: 1452
+        productId:
+          type: integer
+          example: 1452
+        grossMass1:
+          type: integer
+          example: 1452
+        netMass1:
+          type: integer
+          example: 1452
+        tare:
+          type: integer
+          example: 1452
+        ncs:
+           type: string
+           example: 1452:1.70;123665:1.20
+        total:
+           type: integer
+           example: 1444552
+        grossMass2:
+          type: integer
+          example: 1452
+        netMass2:
+          type: integer
+          example: 1452
+          
+    ReceiptDtoList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReceiptDto'    
+            
     UserDto:
       type: object
       properties:
