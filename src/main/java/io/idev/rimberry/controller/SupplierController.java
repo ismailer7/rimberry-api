@@ -57,7 +57,7 @@ public class SupplierController implements SupplierApi {
 	}
 	
 	@GetMapping("/supplier/suppliers")
-	public ResponseEntity<Page<SupplierDto>> getProducts(@RequestParam int page) {
+	public ResponseEntity<Page<SupplierDto>> getSuppliers(@RequestParam int page) {
 		org.springframework.data.domain.Page<SupplierDto> productPage = this.supplierServiceImpl.getByPage(--page);
 		@SuppressWarnings("unchecked")
 		Page<SupplierDto> pageObject = new Page<SupplierDto>().currentPage(productPage.getNumber() + 1)
@@ -66,6 +66,13 @@ public class SupplierController implements SupplierApi {
 				.hasPrevious(productPage.hasPrevious());
 		return new ResponseEntity<Page<SupplierDto>>(pageObject, HttpStatus.OK);
 	}
+	
+	@GetMapping("/supplier")
+	public ResponseEntity<SupplierDto> getSupplier(@RequestParam int id) {
+		SupplierDto supplierDto = this.supplierServiceImpl.get(id);
+		return new ResponseEntity<SupplierDto>(supplierDto, HttpStatus.OK);
+	}
+	
 	
 	@Override
 	public ResponseEntity<Response> deleteSupplier(Integer supplierId) {

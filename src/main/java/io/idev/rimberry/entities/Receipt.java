@@ -33,6 +33,9 @@ public class Receipt {
 
 	@Column(name = "PRODUCT_ID")
 	private int productId;
+	
+	@Column(name = "DRIVER")
+	private String driver;
 
 	@Column(name = "GROSSMASS1")
 	private int grossMass1;
