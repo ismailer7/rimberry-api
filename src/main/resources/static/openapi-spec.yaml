@@ -1055,6 +1055,9 @@ components:
         productId:
           type: integer
           example: 1452
+        driver:
+          type: string
+          example: myDriver
         grossMass1:
           type: integer
           example: 1452

@@ -21,6 +21,7 @@ import io.idev.rimberry.service.ProductServiceImpl;
 import io.idev.storeapi.api.controller.ProductApi;
 import io.idev.storeapi.model.ProductDto;
 import io.idev.storeapi.model.Response;
+import io.idev.storeapi.model.SupplierDto;
 
 @RequestMapping(StoreApiConstants.API_BASE_URI)
 @RestController
@@ -50,6 +51,12 @@ public class ProductController implements ProductApi {
 				.totalElements(productPage.getNumberOfElements()).hasNext(productPage.hasNext())
 				.hasPrevious(productPage.hasPrevious());
 		return new ResponseEntity<Page<ProductDto>>(pageObject, HttpStatus.OK);
+	}
+	
+	@GetMapping("/product")
+	public ResponseEntity<ProductDto> getProduct(@RequestParam int id) {
+		ProductDto productDto = this.productServiceImpl.get(id);
+		return new ResponseEntity<ProductDto>(productDto, HttpStatus.OK);
 	}
 	
 	@Override

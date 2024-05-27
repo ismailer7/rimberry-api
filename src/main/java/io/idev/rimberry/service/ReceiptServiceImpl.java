@@ -52,7 +52,7 @@ public class ReceiptServiceImpl implements IFactoryService<ReceiptDto, Integer> 
 
 	@Override
 	public void add(ReceiptDto t) {
-		Receipt receipt = Receipt.builder().date(t.getDate()).supplierId(t.getSupplierId()).productId(t.getProductId()).ncs(t.getNcs().replace(t.getNcs().charAt(t.getNcs().length() - 1)+"", ""))
+		Receipt receipt = Receipt.builder().date(t.getDate()).supplierId(t.getSupplierId()).productId(t.getProductId()).driver(t.getDriver()).ncs(t.getNcs().replace(t.getNcs().charAt(t.getNcs().length() - 1)+"", ""))
 				.tare(t.getTare()).grossMass1(t.getGrossMass1()).grossMass2(t.getGrossMass2()).netmass1(t.getNetMass1())
 				.netMass2(t.getNetMass2()).total(t.getTotal()).build();
 		this.receiptRepository.saveAndFlush(receipt);
