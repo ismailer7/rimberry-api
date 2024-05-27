@@ -1058,25 +1058,25 @@ components:
         driver:
           type: string
           example: myDriver
-        grossMass1:
+        pb:
           type: integer
           example: 1452
-        netMass1:
+        tp:
           type: integer
           example: 1452
+        pp:
+          type: integer
+          example: 1452
+        tc:
+           type: integer
+           example: 1452
+        tarep:
+           type: integer
+           example: 1444552
         tare:
           type: integer
           example: 1452
-        ncs:
-           type: string
-           example: 1452:1.70;123665:1.20
-        total:
-           type: integer
-           example: 1444552
-        grossMass2:
-          type: integer
-          example: 1452
-        netMass2:
+        tn:
           type: integer
           example: 1452
           

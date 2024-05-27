@@ -16,20 +16,20 @@ import io.idev.storeapi.model.ReceiptDto;
 
 @Service
 public class ReceiptServiceImpl implements IFactoryService<ReceiptDto, Integer> {
-	
+
 	private IReceiptRepository receiptRepository;
-	
+
 	private ModelMapper modelMapper;
-	
+
 	public ReceiptServiceImpl(IReceiptRepository receiptRepository) {
 		this.receiptRepository = receiptRepository;
 	}
-	
+
 	@Autowired
 	public void setModelMapper(ModelMapper modelMapper) {
 		this.modelMapper = modelMapper;
 	}
-	
+
 	@Override
 	public ReceiptDto get(Integer id) {
 		// TODO Auto-generated method stub
@@ -52,9 +52,9 @@ public class ReceiptServiceImpl implements IFactoryService<ReceiptDto, Integer> 
 
 	@Override
 	public void add(ReceiptDto t) {
-		Receipt receipt = Receipt.builder().date(t.getDate()).supplierId(t.getSupplierId()).productId(t.getProductId()).driver(t.getDriver()).ncs(t.getNcs().replace(t.getNcs().charAt(t.getNcs().length() - 1)+"", ""))
-				.tare(t.getTare()).grossMass1(t.getGrossMass1()).grossMass2(t.getGrossMass2()).netmass1(t.getNetMass1())
-				.netMass2(t.getNetMass2()).total(t.getTotal()).build();
+		Receipt receipt = Receipt.builder().date(t.getDate()).supplierId(t.getSupplierId()).productId(t.getProductId())
+				.tarep(t.getTarep()).pb(t.getPb()).pp(t.getPp()).tc(t.getTc()).tp(t.getTp()).tn(t.getTn()).driver(t.getDriver())
+				.tare(t.getTare()).build();
 		this.receiptRepository.saveAndFlush(receipt);
 	}
 

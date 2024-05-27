@@ -36,25 +36,27 @@ public class Receipt {
 	
 	@Column(name = "DRIVER")
 	private String driver;
+	
+	@Column(name = "PB")
+	private int pb;
 
-	@Column(name = "GROSSMASS1")
-	private int grossMass1;
+	@Column(name = "TP")
+	private int tp;
 
+	@Column(name = "PP")
+	private int pp;
+
+	@Column(name = "TC")
+	private int tc;
+	
 	@Column(name = "TARE")
 	private int tare;
+	
+	@Column(name = "TAREP")
+	private int tarep;
 
-	@Column(name = "NATMASS1")
-	private int netmass1;
+	@Column(name = "TN")
+	private int tn;
 
-	@Column(name = "NCS")
-	private String ncs;
-
-	@Column(name = "TOTAL")
-	private int total;
-
-	@Column(name = "GROSSMASS2")
-	private int grossMass2;
-
-	@Column(name = "NATMASS2")
-	private int netMass2;
+	
 }
