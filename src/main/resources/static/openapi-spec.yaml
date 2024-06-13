@@ -1068,14 +1068,23 @@ components:
           type: integer
           example: 1452
         tc:
-           type: integer
-           example: 1452
-        tarep:
-           type: integer
-           example: 1444552
-        tare:
           type: integer
           example: 1452
+        te:
+          type: integer
+          example: 1452
+        total_to:
+          type: integer
+          example: 1452
+        tb:
+          type: integer
+          example: 1452
+        tarep:
+           type: integer
+           example: 1452
+        tare:
+           type: integer
+           example: 1444552
         tn:
           type: integer
           example: 1452

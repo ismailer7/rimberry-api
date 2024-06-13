@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,27 +38,36 @@ public class Receipt {
 	
 	@Column(name = "DRIVER")
 	private String driver;
-	
-	@Column(name = "PB")
+
+	@Column(name = "pb")
 	private int pb;
 
-	@Column(name = "TP")
+	@Column(name = "tp")
 	private int tp;
 
-	@Column(name = "PP")
+	@Column(name = "pp")
 	private int pp;
-
-	@Column(name = "TC")
+	
+	@Column(name = "te")
+	private int te;
+	
+	@Column(name = "total_to")
+	private int totalTo;
+	
+	@Column(name = "tb")
+	private int tb;
+	
+	@Column(name = "tc")
 	private int tc;
 	
-	@Column(name = "TARE")
-	private int tare;
-	
-	@Column(name = "TAREP")
+	@Column(name = "tarep")
 	private int tarep;
 
-	@Column(name = "TN")
+	@Column(name = "tare")
+	private int tare;
+
+	@Column(name = "tn")
 	private int tn;
 
-	
+	  
 }

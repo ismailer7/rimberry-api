@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import io.idev.rimberry.entities.Product;
 import io.idev.rimberry.entities.Receipt;
 import io.idev.rimberry.repos.IReceiptRepository;
 import io.idev.rimberry.service.interfaces.IFactoryService;
@@ -53,8 +52,8 @@ public class ReceiptServiceImpl implements IFactoryService<ReceiptDto, Integer> 
 	@Override
 	public void add(ReceiptDto t) {
 		Receipt receipt = Receipt.builder().date(t.getDate()).supplierId(t.getSupplierId()).productId(t.getProductId())
-				.tarep(t.getTarep()).pb(t.getPb()).pp(t.getPp()).tc(t.getTc()).tp(t.getTp()).tn(t.getTn()).driver(t.getDriver())
-				.tare(t.getTare()).build();
+				.driver(t.getDriver()).pp(t.getPp()).tare(t.getTare()).pb(t.getPb()).tp(t.getTp()).te(t.getTe()).totalTo(t.getTotalTo())
+				.tb(t.getTb()).tc(t.getTc()).tarep(t.getTarep()).tare(t.getTare()).tn(t.getTn()).build();
 		this.receiptRepository.saveAndFlush(receipt);
 	}
 
