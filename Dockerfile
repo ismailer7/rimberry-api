@@ -13,5 +13,8 @@ RUN ["ls", "./usr/app/target"]
 FROM eclipse-temurin:17-jre-jammy 
 ENV SPRING_PROFILES_ACTIVE ${ENVIRONMENT}
 
+COPY /usr/app/target/*.jar /usr/app.jar
+
 EXPOSE 8080
 
+ENTRYPOINT java -jar /usr/app.jar
