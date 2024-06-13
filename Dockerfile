@@ -9,4 +9,4 @@ COPY src ./src
 # Build the application using Maven
 RUN mvn clean package -DskipTests
 
-RUN ["ls", "/app"]
+RUN ["ls", "/app/target"]
