@@ -14,7 +14,8 @@ FROM eclipse-temurin:17-jre-jammy
 RUN "ls"
 ENV SPRING_PROFILES_ACTIVE ${ENVIRONMENT}
 
-ARG JAR_FILE=/usr/app/target/*.jar
-COPY --from=build $JAR_FILE /app/runner.jar
+COPY /target/*.jar app.jar
+
 EXPOSE 8080
-ENTRYPOINT java -jar /app/runner.jar
+
+ENTRYPOINT java -jar /app.jar
