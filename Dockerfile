@@ -12,6 +12,9 @@ RUN --mount=type=cache,target=/root/.m2 ./mvnw -f $HOME/pom.xml clean package
 # Package stage
 #
 FROM eclipse-temurin:17-jre-jammy 
+
+ENV SPRING_PROFILES_ACTIVE ${ENVIRONMENT}
+
 ARG JAR_FILE=/usr/app/target/*.jar
 COPY --from=build $JAR_FILE /app/runner.jar
 EXPOSE 8080
