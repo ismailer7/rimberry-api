@@ -6,7 +6,7 @@ COPY . /usr/app
 COPY pom.xml /usr/app
 
 RUN mvn -f /usr/app/pom.xml clean package -DskipTests
-RUN "ls ./usr/app/"
+RUN ["ls", "./usr/app/"]
 #
 # Package stage
 #
