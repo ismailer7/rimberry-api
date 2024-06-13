@@ -13,5 +13,5 @@ FROM eclipse-temurin:17-jre-jammy
 ENV SPRING_PROFILES_ACTIVE ${ENVIRONMENT}
 
 EXPOSE 8080
-RUN ["ls", "./usr/app/target"]
+RUN ["ls", "./usr/app/"]
 ENTRYPOINT java -jar /usr/app.jar
