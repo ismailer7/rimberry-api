@@ -1,18 +1,17 @@
 #
 # Build stage
 #
-FROM eclipse-temurin:17-jdk-jammy AS build
-ENV HOME=/usr/app
-RUN mkdir -p $HOME
-WORKDIR $HOME
-ADD . $HOME
-RUN --mount=type=cache,target=/root/.m2 ./mvnw.cmd -f $HOME/pom.xml clean package
+FROM maven:3.8.4-openjdk-17 as maven-builder
+COPY src /app/src
+COPY pom.xml /app
+
+RUN mvn -f /app/pom.xml clean package -DskipTests
 
 #
 # Package stage
 #
 FROM eclipse-temurin:17-jre-jammy 
-
+RUN "ls"
 ENV SPRING_PROFILES_ACTIVE ${ENVIRONMENT}
 
 ARG JAR_FILE=/usr/app/target/*.jar
