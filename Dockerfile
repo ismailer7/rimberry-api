@@ -2,11 +2,11 @@
 # Build stage
 #
 FROM maven:3.8.4-openjdk-17 as maven-builder
-COPY src /app/src
-COPY pom.xml /app
+COPY . /usr/app
+COPY pom.xml /usr/app
 
-RUN mvn -f /app/pom.xml clean package -DskipTests
-RUN "ls"
+RUN mvn -f /usr/app/pom.xml clean package -DskipTests
+RUN "ls ./usr/app/"
 #
 # Package stage
 #
