@@ -9,4 +9,5 @@ COPY src ./src
 # Build the application using Maven
 RUN mvn clean package -DskipTests
 
-RUN ["ls", "/app/target"]
+COPY /app/target/store-api-0.0.1-SNAPSHOT.jar app.jar
+CMD ["java", "-jar", "app.jar"]
