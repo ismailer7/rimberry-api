@@ -104,7 +104,7 @@ public class WebSecurityConfig {
 //				.antMatchers("/api/admin/**").hasIpAddress(standardAppProperties.getProxy()).and().authorizeRequests()
 //				.antMatchers("/api/article/**").permitAll().and().authorizeRequests().antMatchers("/verify**")
 //				.permitAll().and().authorizeRequests().antMatchers("/unsub**").permitAll().and().authorizeRequests()
-				.antMatchers("/api/v1/user/login").permitAll().and().authorizeRequests().antMatchers("/h2-console/**")
+				.antMatchers("/api/v1/user/login").permitAll().and().authorizeRequests().antMatchers("/portfolio")
 				.permitAll().
 				// all other requests need to be authenticated
 				anyRequest().authenticated().and().exceptionHandling()
@@ -123,7 +123,7 @@ public class WebSecurityConfig {
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().antMatchers("/js/**", "/images/**", "/v3/api-docs", "/configuration/ui",
+		return (web) -> web.ignoring().antMatchers("/portfolio", "ws://localhost:8080/portfolio", "/js/**", "/images/**", "/v3/api-docs", "/configuration/ui",
 				"/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-ui/**",
 				"/swagger-ui/**", "/v3/api-docs/**");
 	}

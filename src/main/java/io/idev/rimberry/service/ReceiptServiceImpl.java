@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import io.idev.rimberry.entities.Product;
 import io.idev.rimberry.entities.Receipt;
 import io.idev.rimberry.repos.IReceiptRepository;
 import io.idev.rimberry.service.interfaces.IFactoryService;
@@ -16,20 +15,20 @@ import io.idev.storeapi.model.ReceiptDto;
 
 @Service
 public class ReceiptServiceImpl implements IFactoryService<ReceiptDto, Integer> {
-	
+
 	private IReceiptRepository receiptRepository;
-	
+
 	private ModelMapper modelMapper;
-	
+
 	public ReceiptServiceImpl(IReceiptRepository receiptRepository) {
 		this.receiptRepository = receiptRepository;
 	}
-	
+
 	@Autowired
 	public void setModelMapper(ModelMapper modelMapper) {
 		this.modelMapper = modelMapper;
 	}
-	
+
 	@Override
 	public ReceiptDto get(Integer id) {
 		// TODO Auto-generated method stub
@@ -52,9 +51,9 @@ public class ReceiptServiceImpl implements IFactoryService<ReceiptDto, Integer> 
 
 	@Override
 	public void add(ReceiptDto t) {
-		Receipt receipt = Receipt.builder().date(t.getDate()).supplierId(t.getSupplierId()).productId(t.getProductId()).driver(t.getDriver()).ncs(t.getNcs().replace(t.getNcs().charAt(t.getNcs().length() - 1)+"", ""))
-				.tare(t.getTare()).grossMass1(t.getGrossMass1()).grossMass2(t.getGrossMass2()).netmass1(t.getNetMass1())
-				.netMass2(t.getNetMass2()).total(t.getTotal()).build();
+		Receipt receipt = Receipt.builder().date(t.getDate()).supplierId(t.getSupplierId()).productId(t.getProductId())
+				.driver(t.getDriver()).pp(t.getPp()).tare(t.getTare()).pb(t.getPb()).tp(t.getTp()).te(t.getTe()).totalTo(t.getTotalTo())
+				.tb(t.getTb()).tc(t.getTc()).tarep(t.getTarep()).tare(t.getTare()).tn(t.getTn()).build();
 		this.receiptRepository.saveAndFlush(receipt);
 	}
 
