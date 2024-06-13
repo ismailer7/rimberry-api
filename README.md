@@ -1,2 +1,2 @@
-# store-api
-Store API Rest Backend App
+# rimberry-api
+API for Rimberry Administration System.
