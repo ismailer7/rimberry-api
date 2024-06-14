@@ -1,0 +1,507 @@
+<div class="container-fluid">
+    <app-page-title title="RimBerry Raw Materials" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    
+
+    <div class="row">
+      <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-4"> Title Wizard</h4>
+
+          <aw-wizard [navBarLayout]="'large-empty-symbols'">
+            <aw-wizard-step stepTitle="Create Reception Form">
+              <ng-template awWizardStepSymbol>1</ng-template>
+              <div class="row justify-content-center">
+                <div class="col-lg-6">
+                  <div class="text-center">
+                    <div class="p-4">
+                      <button class="btn btn-secondary" awNextStep>Create a New Reception <i class="mdi mdi-chevron-double-right"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aw-wizard-step>
+            <aw-wizard-step stepTitle="Reception Details">
+              <ng-template awWizardStepSymbol>2</ng-template>
+              <form class="outer-repeater" [formGroup]="form" *ngIf="!isLoading">
+                <div class="outer">
+                  <div>
+                    <div class="mb-3">
+                        <label for="example-date-input" class="col-md-2 col-form-label">Date</label>
+                        <input class="form-control" type="date" value="2023-01-17" id="example-date-input" formControlName="date">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="col-md-2 col-form-label">Supplier</label>
+                            <select class="form-select" formControlName="supplierId">
+                                <option selected disabled>Select</option>
+                                <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.id}} - {{supplier.name}} - {{supplier.source}}</option>
+                            </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="col-md-2 col-form-label">Product</label>
+                            <select class="form-select" formControlName="productId">
+                                <option selected disabled>Select</option>
+                                <option *ngFor="let product of products" [value]="product.id">{{product.id}} - {{product.name}}</option>
+                            </select>
+                    </div>
+
+                    <div class="row">
+                      <div class="mb-3 col-md-2">
+                        <label for="driver">Driver</label>
+                        <input type="text" formControlName="driver" class="form-control">
+                      </div>
+  
+                      <div class="mb-3 col-md-2">
+                        <label for="driver">Vehicule Registration Number</label>
+                        <input type="text" formControlName="driver" class="form-control">
+                      </div>
+                    </div>
+                    <!-- <button type="submit" class="btn btn-success" (click)="onSubmit();">Submit</button> -->
+                  </div>
+                </div>
+              </form>
+              <ul class="list-inline wizard mb-0">
+                <li class="previous list-inline-item"><button class="btn btn-secondary" awPreviousStep>Previous</button>
+                </li>
+                <li class="next list-inline-item float-end"><button class="btn btn-secondary" awNextStep>Pallette Details <i class="mdi mdi-chevron-double-right"></i></button>
+                </li>
+              </ul>
+            </aw-wizard-step>
+
+            <aw-wizard-step stepTitle="Palette Details">
+              <ng-template awWizardStepSymbol>3</ng-template>
+
+              
+              <form [formGroup]="form">
+                <div class="row mt-3">
+                  <div class="mb-3 col-lg-2">
+                      <label for="pb">PB (KG)</label>
+                      <input id="pb" type="text" formControlName="pb" class="form-control" value="{{pb}}" (keyup)="savePalettePoidsBrute($event);">
+                  </div>
+                  <div class="mb-3 col-lg-2">
+                      <label for="pp">PP (KG)</label>
+                      <input id="pp" type="text" formControlName="pp" class="form-control" value="{{pp}}" (keyup)="savePalettePoids($event);">
+                  </div>
+                </div>
+              </form>
+
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title mb-4">NC Entry</h4>
+                      <form class="repeater" [formGroup]="form">
+                        <div formArrayName="formlist">
+                          <div *ngFor="let data1 of formData().controls; let i=index;">
+                            <div [formGroupName]="i" class="row">
+                              <div class="mb-3 col-lg-2">
+                                <label for="name">NC</label>
+                                <input type="text" formControlName="nc" class="form-control" (keyup)="onNCWrite($event, i);">
+                              </div>
+            
+                              <div class="mb-3 col-lg-2">
+                                <label>TypeC</label>
+                                <select class="form-select" (change)="selectType($event, i)" formControlName="typec">
+                                    <option>Select</option>
+                                    <option value="0.70">Etranger (0.70)</option>
+                                    <option value="1.20">Orange (1.20)</option>
+                                    <option value="1.10">Blue (1.10)</option>
+                                </select>
+                              </div>
+
+                              <div class="col-lg-2 align-self-center">
+                                    <button class="btn btn-danger" (click)="removeField(i)">
+                                        <span class="mdi mdi-close-box-outline"></span>
+                                    </button>
+                              </div>
+                            </div>
+                          </div>
+                          <input type="button" class="btn btn-success mt-3 mt-lg-0" value="Add" (click)="addField()">
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <form action="" [formGroup]="form">
+                <div class="row">
+                  <div class="mb-3 col-md-2">
+                    <label for="name">NC Total</label>
+                    <input disabled type="text" formControlName="total" class="form-control" value="{{totalNC}}">
+                  </div>
+
+                  <div class="mb-3 col-md-2">
+                    <label for="name">Tare Caisse</label>
+                    <input disabled type="text" formControlName="tareCaisse" class="form-control" value="{{grossMass}}">
+                  </div>
+
+                  <div class="mb-3 col-md-2">
+                    <label for="name">TARE</label>
+                    <input disabled type="text" formControlName="gross" class="form-control" value="{{tare}}">
+                  </div>
+
+                  <div class="mb-3 col-lg-2">
+                    <label for="name">Net MASS (KG)</label>
+                    <input disabled type="text" formControlName="net" class="form-control" value="{{netmass}}">
+                  </div>
+              </div>
+              </form>
+
+              <div class="row">
+                <div class="col-md-2">
+                  <button type="submit" class="btn btn-success" (click)="addPallete();">Add Palette</button>
+                </div>
+              </div> <br><br>
+
+              <ul class="list-inline wizard mb-0">
+                <li class="previous list-inline-item"><button class="btn btn-secondary" awPreviousStep> <i class="mdi mdi-chevron-double-left"></i> Reception General Details</button>
+                </li>
+                <li class="next list-inline-item float-end"><button class="btn btn-secondary" awNextStep>Pallette List <i class="mdi mdi-chevron-double-right"></i></button>
+                </li>
+              </ul>
+            </aw-wizard-step>
+
+            <aw-wizard-step stepTitle="Palette List Confirm">
+              <ng-template awWizardStepSymbol>4</ng-template>
+
+              <div class="row mt-3">
+                <div class="col-12">
+                  <table id="example" class="table table-light table-hover table-striped caption-top" style="width:100%">
+                    <caption style="text-align: left;">
+                        <div class="row">
+                          <div class="input-group" class="col-md-4">
+                            <input type="text" class="form-control" placeholder="Search Pallete..." aria-label="Recipient's username">
+                            <div class="input-group-append">
+                            </div>
+                          </div>
+                        </div>
+                    </caption>
+                        <thead class="table-white">
+                            <tr>
+                                <th scope="col" style="width: 100px">ID</th>
+                                          <th scope="col">PB</th>
+                                          <th scope="col">PP</th>
+                                          <th scope="col">TOTAL CASES</th>
+                                          <th scope="col">TARE CASES</th>
+                                          <th scope="col">TARE</th>
+                                          <th scope="col">NET</th>
+                                          <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pallete of palettes;">
+                                <td>
+                                    <a (click)="onCopy(pallete.id);" href="javascript: void(0);" class="text-dark">
+                                        <span>{{pallete.id}}</span>
+                                      </a>
+                                </td>
+                                <td>
+                                    <a (click)="onCopy(pallete.pb);" href="javascript: void(0);" class="text-dark">
+                                        <span>{{pallete.pb}}</span>
+                                      </a>
+                                </td>
+                                <td>
+                                  <h5 class="text-truncate font-size-14">
+                                    <a (click)="onCopy(pallete.pp);" href="javascript: void(0);" class="text-dark">
+                                      <span>{{pallete.pp}}</span>
+                                    </a>
+                                  </h5>
+                                <td>
+                                    <h5 class="text-truncate font-size-14">
+                                        <a (click)="onCopy(pallete.totalCases);" href="javascript: void(0);" class="text-dark">
+                                            <span>{{pallete.totalCases}}</span>
+                                          </a>
+                                      </h5>
+                                </td>
+                                <td>
+                                  <a (click)="onCopy(pallete.tareCases);" href="javascript: void(0);" class="text-dark">
+                                    <span>{{pallete.tareCases}}</span>
+                                  </a>
+                                </td>
+                                <td>
+                                  <a (click)="onCopy(pallete.tare);" href="javascript: void(0);" class="text-dark">
+                                    <span>{{pallete.tare}}</span>
+                                  </a>
+                                </td>
+                                <td>
+                                  <a (click)="onCopy(pallete.net);" href="javascript: void(0);" class="text-dark">
+                                    <span>{{pallete.net}}</span>
+                                  </a>
+                                </td>
+                                  <td>
+                                    <button style="border: 0; background-color: transparent; color: rgb(248, 72, 72);">
+                                      <span class="badge bg-danger rounded-pill">delete</span>
+                                    </button>
+                                  </td>
+                              </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="palettes.length == 0" class="sm-12">
+                      <div style="text-align: center; padding-bottom: 20px;">No Pallete Registered!</div>
+                    </div>
+                </div>
+              </div>
+
+              <ul class="list-inline wizard mb-0">
+                <li class="previous list-inline-item"><button class="btn btn-secondary" awPreviousStep><i class="mdi mdi-chevron-double-left"></i> Pallette Details</button>
+                </li>
+                <li class="next list-inline-item float-end"><button class="btn btn-secondary" awNextStep>Confirm Pallettes <i class="mdi mdi-chevron-double-right"></i></button>
+                </li>
+              </ul>
+            </aw-wizard-step>
+
+            <aw-wizard-step stepTitle="Reception Confirm">
+              <ng-template awWizardStepSymbol>5</ng-template>
+              <div class="row justify-content-center">
+                <div class="col-lg-6">
+                  <div class="text-center">
+                    <div class="mb-4">
+                      <i class="mdi mdi-check-circle-outline text-success display-4"></i>
+                    </div>
+                    <div class="container-fluid" id="invoice">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="invoice-title">
+                                <h4 class="float-end font-size-16"><strong>Reception # 12345</strong></h4>
+                                <div class="mb-3" style="text-align: left;">
+                                  <img src="../../../../assets/images/brands/rimberry2-logo.png" alt="logo" height="40" />
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-6 mt-3" style="text-align: left;">
+                                  <address>
+                                    <strong>Reception Date:</strong><br>
+                                    October 16, 2019<br><br>
+                                  </address>
+                                </div>
+                                <!-- <div class="col-md-6" style="text-align: left;">
+                                  <address>
+                                    <strong>Billed To:</strong><br>
+                                    John Smith<br>
+                                    1234 Main<br>
+                                    Apt. 4B<br>
+                                    Springfield, ST 54321
+                                  </address>
+                                </div> -->
+                                <div class="col-md-6 text-sm-end">
+                                  <address>
+                                    <strong>Shipped To:</strong><br>
+                                    Kenny Rigdon<br>
+                                    1234 Main<br>
+                                    Apt. 4B<br>
+                                    Springfield, ST 54321
+                                  </address>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-6">
+                                  <address>
+                                    <strong>Payment Method:</strong><br>
+                                    Visa ending **** 4242<br>
+                                    jsmith@email.com
+                                  </address>
+                                </div>
+                                <div class="col-6 mt-3 text-sm-end">
+                                  <address>
+                                    <strong>Reception Date:</strong><br>
+                                    October 16, 2019<br><br>
+                                  </address>
+                                </div>
+                              </div>
+                              <div class="py-2 mt-3">
+                                <h3 class="font-size-15 fw-bold">Order summary</h3>
+                              </div>
+                              <div class="table-responsive">
+                                <table class="table">
+                                  <thead>
+                                    <tr>
+                                      <th style="width: 70px;">No.</th>
+                                      <th>Item</th>
+                                      <th class="text-end">Price</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>01</td>
+                                      <td>Skote - Bootstrap 4 Admin Dashboard</td>
+                                      <td class="text-end">$499.00</td>
+                                    </tr>
+                    
+                                    <tr>
+                                      <td>02</td>
+                                      <td>Skote - Bootstrap 4 Landing Template</td>
+                                      <td class="text-end">$399.00</td>
+                                    </tr>
+                    
+                                    <tr>
+                                      <td>03</td>
+                                      <td>Veltrix - Bootstrap 4 Admin Template</td>
+                                      <td class="text-end">$499.00</td>
+                                    </tr>
+                                    <tr>
+                                      <td colspan="2" class="text-end">Sub Total</td>
+                                      <td class="text-end">$1397.00</td>
+                                    </tr>
+                                    <tr>
+                                      <td colspan="2" class="border-0 text-end">
+                                        <strong>Shipping</strong></td>
+                                      <td class="border-0 text-end">$13.00</td>
+                                    </tr>
+                                    <tr>
+                                      <td colspan="2" class="border-0 text-end">
+                                        <strong>Total</strong></td>
+                                      <td class="border-0 text-end">
+                                        <h4 class="m-0">$1410.00</h4>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div class="d-print-none">
+                                <div class="float-end">
+                                  <a href="javascript:void(0)" class="btn btn-success" (click)="print('invoice')"><i class="fa fa-print"></i></a>
+                                  <a href="javascript: void(0);" class="btn btn-primary w-md ms-1">Send</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end row -->
+                    
+                    </div> <!-- container-fluid -->
+
+                  </div>
+                </div>
+              </div>
+              <ul class="list-inline wizard mb-0">
+                <li class="previous list-inline-item"><button class="btn btn-secondary" awPreviousStep>Previous</button>
+                </li>
+                <li class="next list-inline-item float-end"><button class="btn btn-secondary" awNextStep>Confirm Reception</button>
+                </li>
+              </ul>
+            </aw-wizard-step>
+          </aw-wizard>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    
+    <<!-- div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title mb-4">Raw Material</h4>
+              <div *ngIf="isLoading">
+                loading
+              </div>
+              <form class="outer-repeater" [formGroup]="form" *ngIf="!isLoading">
+                <div class="outer">
+                  <div>
+                    <div class="mb-3">
+                        <label for="example-date-input" class="col-md-2 col-form-label">Date</label>
+                        <input class="form-control" type="date" value="2023-01-17" id="example-date-input" formControlName="date">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="col-md-2 col-form-label">Supplier</label>
+                            <select class="form-select" formControlName="supplierId">
+                                <option selected disabled>Select</option>
+                                <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.source}}</option>
+                            </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="col-md-2 col-form-label">Product</label>
+                            <select class="form-select" formControlName="productId">
+                                <option selected disabled>Select</option>
+                                <option *ngFor="let product of products" [value]="product.id">{{product.name}}</option>
+                            </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-lg-2">
+                            <label for="gmass">GROSSE MASS (POIDS BRUTE)</label>
+                            <input type="text" formControlName="gmass" class="form-control" value="{{gmass}}" (keyup)="saveGMMASS($event);">
+                        </div>
+                        <div class="mb-3 col-lg-2">
+                            <label for="tare">TARE</label>
+                            <input type="text" formControlName="tare" class="form-control" value="{{tare}}" (keyup)="saveTARE($event);">
+                        </div>
+                        <div class="mb-3 col-lg-2">
+                            <label for="nmass">NET MASS (POIDS NET)</label>
+                            <input disabled type="text" formControlName="nmass" class="form-control" value="{{nmass}}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title mb-4">NC Entry</h4>
+                              <form class="repeater" [formGroup]="form">
+                                <div formArrayName="formlist">
+                                  <div *ngFor="let data1 of formData().controls; let i=index;">
+                                    <div [formGroupName]="i" class="row">
+                                      <div class="mb-3 col-lg-2">
+                                        <label for="name">NC</label>
+                                        <input type="text" formControlName="nc" class="form-control" (keyup)="onNCWrite($event, i);">
+                                      </div>
+                    
+                                      <div class="mb-3 col-lg-2">
+                                        <label>TypeC</label>
+                                        <select class="form-select" (change)="selectType($event, i)" formControlName="typec">
+                                            <option>Select</option>
+                                            <option value="0.70">Etranger (0.70)</option>
+                                            <option value="1.20">Orange (1.20)</option>
+                                            <option value="1.10">Blue (1.10)</option>
+                                        </select>
+                                      </div>
+
+                                      <div class="col-lg-2 align-self-center">
+                                            <button class="btn btn-danger" (click)="removeField(i)">
+                                                <span class="mdi mdi-close-box-outline"></span>
+                                            </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <input type="button" class="btn btn-success mt-3 mt-lg-0" value="Add" (click)="addField()">
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="mb-3 col-md-2">
+                            <label for="name">Total Caisses</label>
+                            <input disabled type="text" formControlName="total" class="form-control" value="{{totalNC}}">
+                          </div>
+    
+                          <div class="mb-3 col-md-2">
+                            <label for="name">Gross MASS (KG)</label>
+                            <input disabled type="text" formControlName="gross" class="form-control" value="{{grossMass}}">
+                          </div>
+    
+                          <div class="mb-3 col-lg-2">
+                            <label for="name">Net MASS (KG)</label>
+                            <input  type="text" formControlName="net" class="form-control" value="{{netmass}}">
+                          </div>
+                      </div>
+
+                    <button type="submit" class="btn btn-success" (click)="onSubmit();">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div> -->
+</div>
