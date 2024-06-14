@@ -1,0 +1,278 @@
+
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-12" style="text-align: right;">
+        <a href=""><i class="mdi mdi-help-circle-outline"></i> Help</a>
+      </div>
+    </div><br>
+    <app-page-title title="RimBerry User" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-sm-8">
+                  <form>
+                    <div>
+                      <div class="input-group">
+                        <input type="text" class="form-control" (keyup)="search($event)" placeholder="Search ..." aria-label="Recipient's username">
+                        <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-sm-4">
+                  <div class="text-sm-end m-1">
+                    <button class="btn btn-success" (click)="openModal(content)"><span>Add new member</span></button>
+                  </div>
+                </div><!-- end col-->
+              </div>
+            <div class="table-responsive">
+              <table class="table align-middle  table-nowrap table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col" style="width: 70px;">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Permission</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Online</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let user of users; let i = index">
+                    <td>
+                      <div class="avatar-xs">
+                        <img width="32" height="32" src="../../../../assets/images/users/user_1177568.png" alt="">
+                      </div>
+                    </td>
+                    <td>
+                        <a (click)="onCopy(user.id);" href="javascript: void(0);" class="text-dark">
+                          <span class="badge badge-pill bg-light font-size-10 m-1">{{ user.id }}</span>
+                        </a>
+                    </td>
+                    <td>
+                      <a (click)="onCopy(user.firstName +  ' ' + user.lastName);" href="javascript: void(0);" class="text-dark">
+                        <span class="badge badge-pill bg-light font-size-10 m-1">{{ user.firstName }} {{ user.lastName }}</span>
+                      </a>
+                    </td>
+                    <td>
+                      <a (click)="onCopy(user.email);" href="javascript: void(0);" class="text-dark">
+                        <span class="badge badge-pill bg-light font-size-10 m-1">{{ user.email }}</span>
+                      </a>
+                    </td>
+                    <td>
+                      <div *ngFor="let role of getRoles(user.roles)">
+                        <a href="javascript: void(0);" class="badge bg-primary font-size-10 m-1">{{ role }}</a>
+                      </div>
+                    </td>
+                    <td>
+                        <span [ngClass]="user.isActive ? 'badge badge-pill bg-success font-size-11' : 'badge badge-pill bg-danger font-size-11'">
+                            {{ getStatus(user) }}
+                        </span>
+                    </td>
+                    <td>
+
+                        <span [ngClass]="user.isLogged ? 'online' : 'offline'">
+                          <img width="16" height="16" [src]="user.isLogged ? '../../../../assets/images/users/green.png' : '../../../../assets/images/users/grey.png'"/>
+                        </span>
+                    </td>
+                    <td>
+                        <!-- Button trigger modal -->
+                        <span style="padding: 5px;"></span>
+                        <button class="btn btn-primary btn-sm" (click)="openModal(content2, user);"><span>Edit</span></button>
+                        <span style="padding: 5px;"></span>
+                        <button class="btn btn-danger btn-sm" (click)="confirm(user.id)"><span>Delete</span></button>
+                        <span style="padding: 5px;"></span>
+                        <button class="btn btn-sm btn-aqua"><span>Profile</span></button>
+                      </td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <ul class="pagination pagination-square justify-content-center mt-4">
+                  <li [ngClass]="hasPrevious ? 'page-item' : 'page-item disabled'" >
+                    <a href="javascript: void(0);" class="page-link" (click)="previous()"><i class="mdi mdi-chevron-left"></i></a>
+                  </li>
+                  <li *ngFor="let page of pages;">
+                    <a href="javascript: void(0);" [ngClass]="page==currentPage ? 'page-link active': 'page-link' " (click)="getByPage(page)">{{ page }}</a>
+                  </li>
+                  <li [ngClass]="hasNext ? 'page-item' : 'page-item disabled'">
+                    <a href="javascript: void(0);" class="page-link" (click)="next()"><i class="mdi mdi-chevron-right"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Standard Modal for add -->
+<ng-template #content role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title mt-0">Add User</h5>
+      <button type="button" class="btn-close" aria-hidden="true" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+     <form (ngSubmit)="saveUser()" [formGroup]="formData">
+      <div class="row">
+        <div class="col-12">
+          <div class="mb-3">
+            <label class="control-label">First Name</label>
+            <input [ngStyle]="!form.firstname.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter First Name" type="text" name="title" autocomplete="off" formControlName="firstname"
+                [ngClass]="{'is-invalid': submitted}" />
+          </div>
+          <div class="mb-3">
+            <label class="control-label">Last Name</label>
+            <input [ngStyle]="!form.lastname.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter Username" type="text" name="title" autocomplete="off" formControlName="lastname"
+                [ngClass]="{'is-invalid': submitted && form.username.errors}" />
+          </div>
+          <div class="mb-3">
+            <label class="control-label">Email</label>
+            <input [ngStyle]="!form.email.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter email" type="text" name="email" autocomplete="off" formControlName="email"
+                [ngClass]="{'is-invalid': submitted && form.email.errors}" />
+          </div>
+
+          <div class="mb-3">
+            <label for="tag-input" class="form-label">Status</label>
+            <select class="form-select" aria-label="Employee Status">
+              <option selected>Employee Status</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label class="control-label">Gender</label><br>
+            <div  class="custom-control custom-radio">
+							<input id="male" type="radio" class="custom-control-input" value="M" name="gender" formControlName="gender"> 
+              <label class="custom-control-label" for="male"> Male</label>
+            </div>
+
+            <div class="custom-control custom-radio">
+              <input id="female" type="radio" class="custom-control-input" value="F" name="gender" formControlName="gender"> 
+              <label class="custom-control-label" for="female"> Female</label> 
+            </div>
+            <div *ngIf="form.gender.errors" style="color: red;">
+              <span *ngIf="form.gender.errors.required">Please select either value*</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="control-label">Password</label>
+            <input [ngStyle]="!form.password.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter password" type="password" name="password" autocomplete="off" formControlName="password" (keyup)="checkPassword();"/>
+          </div>
+          <div class="mb-3">
+            <label class="control-label">Repeat Password</label>
+            <input [ngStyle]="!form.repeatPassword.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Repeat Password" type="password" name="password" autocomplete="off" formControlName="repeatPassword" (keyup)="checkPassword();"/>
+            <span style="color: red;" *ngIf="passwordMatched == 'false'">Password Do Not Match*</span>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tag-input" class="form-label">Permissions</label>
+            <select id="tag-input" multiple="multiple" formControlName="permissions" data-placeholder="Choose ..." class="select2 form-control select2-multiple ng-untouched ng-pristine ng-valid">
+              <option value="0: 'RECEPTION'">RECEPTION</option>
+              <option value="1: 'ADMIN'">ADMIN</option>
+              <option value="2: 'SUPERVISOR'">SUPERVISOR</option>
+              <option value="3: 'HR'">HR</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-secondary me-1" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button [disabled]="form.firstname.errors || form.lastname.errors || form.email.errors || form.gender.errors || form.password.errors || form.repeatPassword.errors || form.permissions.errors" type="submit" class="btn btn-success" id="btn-save-event">
+        Save
+      </button>
+     </form>
+    </div>
+  </ng-template>
+
+
+<!-- modal for edit -->  
+
+<ng-template #content2 let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 id="newContactModalLabel" class="modal-title">Edit User</h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="edit()" [formGroup]="formData2" novalidate="" autocomplete="off" id="createContact-form" class="needs-validation createContact-form ng-untouched ng-pristine ng-invalid">
+        <div class="row">
+          <div class="col-lg-12">
+            <input type="hidden" id="userid-input" class="form-control">
+            <!--<div class="text-center mb-4">
+              <div class="position-relative d-inline-block">
+                <div class="position-absolute bottom-0 end-0">
+                  <label for="member-image-input" data-bs-toggle="tooltip" data-bs-placement="right" title="Select Member Image" class="mb-0">
+                    <div class="avatar-xs">
+                      <div class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                        <i class="bx bxs-image-alt"></i>
+                      </div>
+                    </div>
+                  </label>
+                  <input value="" id="member-image-input" type="file" accept="image/png, image/gif, image/jpeg" class="form-control d-none">
+                </div>
+                <div class="avatar-lg">
+                  <div class="avatar-title bg-light rounded-circle">
+                    <img src="undefined" id="member-img" class="avatar-md rounded-circle h-auto">
+                  </div>
+                </div>
+              </div>
+            </div> !-->
+            <div class="mb-3">
+                <label class="control-label">First Name</label>
+                <input class="form-control" placeholder={{currentUserToBeEdited.firstName}} type="text" name="title" autocomplete="off" formControlName="firstname"
+                    [ngClass]="{'is-invalid': submitted && form.username.errors}" />
+                  <div *ngIf="submitted && form.firstname.errors" class="invalid-feedback">
+                    <span *ngIf="form.firstname.errors.required">FirstName is required.</span>
+                  </div>
+              </div>
+              <div class="mb-3">
+                <label class="control-label">Last Name</label>
+                <input class="form-control" placeholder={{currentUserToBeEdited.lastName}} type="text" name="title" autocomplete="off" formControlName="lastname"
+                    [ngClass]="{'is-invalid': submitted && form.username.errors}" />
+                  <div *ngIf="submitted && form.lastname.errors" class="invalid-feedback">
+                    <span *ngIf="form.lastname.errors.required">LastName is required.</span>
+                  </div>
+              </div>
+              <div class="mb-3">
+                <label class="control-label">Email</label>
+                <input class="form-control" placeholder={{currentUserToBeEdited.email}} type="text" name="email" autocomplete="off" formControlName="email"
+                    [ngClass]="{'is-invalid': submitted && form.email.errors}" />
+                    <div *ngIf="submitted && form.email.errors" class="invalid-feedback">
+                      <span *ngIf="form.email.errors.required">Email is required.</span>
+                      <span *ngIf="form.email.errors.pattern">This value should be a valid email.</span>
+                    </div>
+              </div>
+            <div class="mb-3">
+                <label for="tag-input" class="form-label">Permissions</label>
+                <select id="tag-input" multiple="multiple" formControlName="permissions" data-placeholder="Choose ..." class="select2 form-control select2-multiple ng-untouched ng-pristine ng-valid">
+                  <option value="0: 'RECEPTION'">RECEPTION</option>
+                  <option value="1: 'ADMIN'">ADMIN</option>
+                  <option value="2: 'SUPERVISOR'">SUPERVISOR</option>
+                  <option value="3: 'HR'">HR</option>
+                </select>
+              </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="text-end">
+              <button type="button" class="btn btn-outline-secondary me-1" (click)="modal.dismiss('Cross click')">Cancel</button>
+              <button type="submit" id="addContact-btn" class="btn btn-success">Update</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
