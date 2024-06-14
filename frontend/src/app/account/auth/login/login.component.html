@@ -1,0 +1,120 @@
+<app-loader></app-loader>
+<div class="container-fluid p-0">
+  <div class="row g-0">
+
+      <div class="col-xl-9">
+          <div class="auth-full-bg pt-lg-5 p-4">
+              <div class="w-100">
+                  <div class="bg-overlay"></div>
+                  <div class="d-flex h-100 flex-column">
+
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- end col -->
+
+      <div class="col-xl-3">
+          <div class="auth-full-page-content p-md-5 p-4">
+              <div class="w-100">
+
+                  <div class="d-flex flex-column h-100">
+                      <div class="mb-4 mb-md-5">
+                          <a routerLink="/" class="d-block auth-logo">
+                              <img src="../../../../assets/images/brands/rimberry2-logo.png" alt="">
+                          </a>
+                      </div>
+                      <div class="my-auto">
+
+                          <div>
+                              <h5 class="text-primary">Welcome Back !</h5>
+                              <p>Sign in to continue to Rimberry Administration System.</p>
+                          </div>
+
+                          <div class="mt-4">
+                              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                                  
+                                  <div class="row">
+                                      <div *ngIf="isError" class="col-127">
+                                          <ngb-alert type="danger" [dismissible]="false">
+                                            <span class="mdi mdi-alert"></span> {{error}}
+                                          </ngb-alert>
+                                      </div>
+
+                                     <!--  <div *ngIf="isError" class="alert alert-danger alert-dismissible fade show">
+                                        <h4 class="alert-heading"><i class="bi-exclamation-octagon-fill"></i> Oops! Something went wrong.</h4>
+                                        <p>{{error}}</p>
+                                        <hr>
+                                        <p class="mb-0">Make sure you enter Valid Credetnials!</p>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div> -->
+
+
+                                      <div *ngIf="isSuccess" class="col-12">
+                                          <ngb-alert [dismissible]="false" type="success" >
+                                            <span class="mdi mdi-checkbox-multiple-marked"></span> Success, Logging you in...
+                                          </ngb-alert>
+                                      </div>
+                                  </div>
+
+                                  <div class="mb-3">
+                                      <label for="email">Email</label>
+                                      <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email"
+                                        [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                                      <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                        <div *ngIf="f.email.errors.required">Email is required</div>
+                                        <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+                                      </div>
+                                    </div>
+
+
+                                    <div class="mb-3">
+                                      <label for="password">Password</label>
+                                      <div class="input-group auth-pass-inputgroup">
+                                        <input type="{{password}}" class="form-control" formControlName="password" placeholder="Enter password"
+                                          [ngClass]="{ 'is-invalid': submitted && f.password.errors }" aria-label="Password"
+                                          aria-describedby="password-addon">
+                    
+                                        <button class="btn btn-light ms-0" type="button" id="password-addon"><i
+                                            class="mdi mdi-eye-outline" (click)="onShow();"></i></button>
+                                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                          <span *ngIf="f.password.errors.required">Password is required</span>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" id="remember-check">
+                                      <label class="form-check-label" for="remember-check">
+                                          Remember me
+                                      </label>
+                                  </div>
+
+                                  <div class="mt-3 d-grid">
+                                      <button class="btn btn-danger btn-block" type="submit">
+                                        <span *ngIf="submitted===true"><img src="../../../../assets/images/loadingwhite.gif" width="15"></span>
+                                        <span *ngIf="!submitted">Log in</span>
+                                      </button>
+                                  </div>
+
+
+
+                              </form>
+                              <div class="mt-5 text-center">
+                                  <p>Don't have an account ? Contact your Administration </p>
+                          </div>
+                      </div>
+
+                      <div class="mt-4 mt-md-5 text-center">
+                          <p class="mb-0">
+                              <p>© {{year}} Rimberry. Crafted with <i class="mdi mdi-heart text-danger"></i> by io.idevs</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- end col -->
+  </div>
+  <!-- end row -->
+</div>
+<!-- end container-fluid -->
