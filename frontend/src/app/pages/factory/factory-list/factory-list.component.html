@@ -1,0 +1,243 @@
+<div class="container-fluid">
+  <app-page-title title="RimBerry Factory" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-sm-8">
+                  <form>
+                    <div>
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username" (keyup)="lookup($event)">
+                        <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-sm-4">
+                  <div class="text-sm-end m-1">
+                    <button class="btn btn-success" (click)="openModal(content)"><span>Add new Fatory</span></button>
+                  </div>
+                </div><!-- end col-->
+              </div>
+            <div class="table-responsive">
+                <table class="table project-list-table table-nowrap align-middle table-borderless">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" style="width: 100px">#</th>
+                        <th scope="col">Factory</th>
+                        <th scope="col">Working Hours</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Owner</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                </thead>
+                
+                <tbody>
+                    <tr *ngFor="let factory of factoryData;">
+                      <td>
+                        <img src="../../../../assets/images/factory/factory.png" alt class="avatar-sm" />
+                      </td>
+                      <td>
+                        <h5 class="text-truncate font-size-14">
+                          <a (click)="onCopy(factory.name);" href="javascript: void(0);" class="text-dark">
+                            <span class="badge badge-pill bg-light font-size-10 m-1">{{ factory.name }}</span>
+                          </a>
+                        </h5>
+                        <p class="text-muted mb-0">
+                          <a (click)="onCopy(factory.location);" href="javascript: void(0);" class="text-dark">
+                            <span class="badge badge-pill bg-light font-size-10 m-1"> {{ factory.location }} </span>
+                          </a>
+                        </p>
+                      </td>
+                      <td>
+                        <a (click)="onCopy(factory.wh);" href="javascript: void(0);" class="text-dark">
+                          <span class="badge badge-pill bg-light font-size-10 m-1">{{factory.wh}}</span>
+                        </a>
+                      </td>
+                      <td>
+                        <a (click)="onCopy(factory.status);" href="javascript: void(0);" class="text-dark">
+                          <span class="badge" [ngClass]="{ 'bg-success': factory.status === 'OPEN',
+                          'bg-warning': factory.status === 'CLOSED',
+                          'bg-danger': factory.status === 'INACTIVE' }">{{factory.status}}</span>
+                        </a>
+                      </td>
+                      <td>
+                        <div class="avatar-group">
+                          <div class="avatar-group-item">
+                            <a href="javascript: void(0);" class="d-inline-block">
+                              <img src="../../../../assets/images/owner/owner.png" class="rounded-circle avatar-xs" (click)="owner(factory.owner);" />
+                            </a>
+                          </div>
+                          <!-- <div class="avatar-group-item" *ngIf="project.users[1]">
+                            <a href="javascript: void(0);" class="d-inline-block">
+                              <img src="{{project.users[1]}}" class="rounded-circle avatar-xs" alt />
+                            </a>
+                          </div> -->
+                        </div>
+                      </td>
+                      <td>
+                        <div class="dropdown" ngbDropdown placement="bottom-right">
+                          <a href="javascript: void(0);" class="dropdown-toggle card-drop" ngbDropdownToggle>
+                            <i class="mdi mdi-dots-horizontal font-size-18"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu" ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript: void(0);" (click)="openModal(content2, factory)">Edit</a>
+                            <a class="dropdown-item" href="javascript: void(0);" (click)="delete(factory.id)">Delete</a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+              <div *ngIf="factoryData.length == 0" class="sm-12">
+                <div style="text-align: center; padding-bottom: 20px;">No Factory!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="factoryData.length != 0">
+      <div class="col-lg-12">
+        <ul class="pagination pagination-square justify-content-center mt-4">
+          <li [ngClass]="hasPrevious ? 'page-item' : 'page-item disabled'" >
+            <a href="javascript: void(0);" class="page-link" (click)="previous()"><i class="mdi mdi-chevron-left"></i></a>
+          </li>
+          <li *ngFor="let page of pages;">
+            <a href="javascript: void(0);" [ngClass]="page==currentPage ? 'page-link active': 'page-link' " (click)="getByPage(page)">{{ page }}</a>
+          </li>
+          <li [ngClass]="hasNext ? 'page-item' : 'page-item disabled'">
+            <a href="javascript: void(0);" class="page-link" (click)="next()"><i class="mdi mdi-chevron-right"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template #content role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title mt-0">Add Factory</h5>
+      <button type="button" class="btn-close" aria-hidden="true" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+     <form (ngSubmit)="addFactory()" [formGroup]="formData">
+      <div class="row">
+        <div class="col-12">
+          <div class="mb-3">
+            <label class="control-label">Factory Name</label>
+            <input [ngStyle]="!form.name.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter First Name" type="text" name="title" autocomplete="off" formControlName="name" />
+          </div>
+          <div class="mb-3">
+            <label class="control-label">Factory Location</label>
+            <input [ngStyle]="!form.location.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter Username" type="text" name="title" autocomplete="off" formControlName="location" />
+          </div>
+
+          <div class="mb-3">
+            <label for="tag-input" class="form-label">Status</label>
+            <select class="form-select" aria-label="Factory Status" formControlName="status">
+              <option selected disabled>Factory status</option>
+              <option value="1">OPEN</option>
+              <option value="2">CLOSED</option>
+              <option value="0">INACTIVE</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="control-label">Owner Email</label>
+            <input [ngStyle]="!form.email.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter email" type="text" name="email" autocomplete="off" formControlName="email" />
+          </div>
+
+          <div class="mb-3">
+            <label class="control-label">Owner Name</label>
+            <input [ngStyle]="!form.fullname.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter First Name" type="text" name="title" autocomplete="off" formControlName="fullname" />
+          </div>
+
+          <div class="mb-3">
+            <label class="control-label">Owner Phone Number</label>
+            <input [ngStyle]="!form.phone.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter Username" type="text" name="title" autocomplete="off" formControlName="phone" />
+          </div>
+
+          <div class="mb-3">
+            <label class="control-label">Owner Location</label>
+            <input [ngStyle]="!form.ownerlocation.errors ? {border:'1px solid green'} : ''" class="form-control" placeholder="Enter Username" type="text" name="title" autocomplete="off" formControlName="ownerlocation" />
+          </div>
+
+          
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-secondary me-1" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button [disabled]="form.ownerlocation.errors || form.location.errors || form.name.errors || form.fullname.errors || form.phone.errors || form.email.errors" type="submit" class="btn btn-success" id="btn-save-event">
+        Save
+      </button>
+     </form>
+    </div>
+  </ng-template>
+
+
+
+
+  <ng-template #content2 role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title mt-0">Edit Factory</h5>
+      <button type="button" class="btn-close" aria-hidden="true" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+     <form (ngSubmit)="editFactory()" [formGroup]="editFormData">
+      <div class="row">
+        <div class="col-12">
+          <div class="mb-3">
+            <label class="control-label">Factory Name</label>
+            <input class="form-control" placeholder="Enter First Name" type="text" name="title" autocomplete="off" formControlName="name" />
+          </div>
+          <div class="mb-3">
+            <label class="control-label">Factory Location</label>
+            <input class="form-control" placeholder="Enter Username" type="text" name="title" autocomplete="off" formControlName="location" />
+          </div>
+          
+          <div class="mb-3">
+            <label for="tag-input" class="form-label">Status</label>
+            <select class="form-select" aria-label="Factory Status">
+              <option selected disabled>Factory status</option>
+              <option value="1">OPEN</option>
+              <option value="2">CLOSED</option>
+              <option value="0">INACTIVE</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="control-label">Owner Email</label>
+            <input class="form-control" placeholder="Enter email" type="text" name="email" autocomplete="off" formControlName="email" />
+          </div>
+
+          <div class="mb-3">
+            <label class="control-label">Owner Name</label>
+            <input class="form-control" placeholder="Enter First Name" type="text" name="title" autocomplete="off" formControlName="fullname"  />
+          </div>
+
+          <div class="mb-3">
+            <label class="control-label">Owner Phone Number</label>
+            <input class="form-control" placeholder="Enter Username" type="text" name="title" autocomplete="off" formControlName="phone" />
+          </div>
+
+          <div class="mb-3">
+            <label class="control-label">Owner Location</label>
+            <input class="form-control" placeholder="Enter Username" type="text" name="title" autocomplete="off" formControlName="ownerlocation" />
+          </div>
+
+          
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-secondary me-1" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button [disabled]="editForm.email.errors && editForm.fullname.errors && editForm.name.errors && editForm.status.errors && editForm.ownerlocation.errors && editForm.phone.errors && editForm.location.errors" type="submit" class="btn btn-success" id="btn-save-event">
+        Edit
+      </button>
+     </form>
+    </div>
+  </ng-template>
