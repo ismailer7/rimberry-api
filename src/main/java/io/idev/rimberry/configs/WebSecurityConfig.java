@@ -104,7 +104,7 @@ public class WebSecurityConfig {
 //				.antMatchers("/api/admin/**").hasIpAddress(standardAppProperties.getProxy()).and().authorizeRequests()
 //				.antMatchers("/api/article/**").permitAll().and().authorizeRequests().antMatchers("/verify**")
 //				.permitAll().and().authorizeRequests().antMatchers("/unsub**").permitAll().and().authorizeRequests()
-				.antMatchers("/api/v1/user/login").permitAll().and().authorizeRequests().antMatchers("/portfolio")
+				.antMatchers("/api/v1/user/login", "/api/v1/hello").permitAll().and().authorizeRequests().antMatchers("/portfolio")
 				.permitAll().
 				// all other requests need to be authenticated
 				anyRequest().authenticated().and().exceptionHandling()
