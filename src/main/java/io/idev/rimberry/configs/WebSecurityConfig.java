@@ -1,5 +1,6 @@
 package io.idev.rimberry.configs;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +29,9 @@ public class WebSecurityConfig {
 	private UserDetailsService jwtUserDetailsService;
 
 	private JwtRequestFilter jwtRequestFilter;
+
+	@Value("${allowed.origins}")
+	private String allowedOrigins;
 
 //	@Autowired
 //	private StandardAppProperties standardAppProperties;
@@ -104,8 +110,8 @@ public class WebSecurityConfig {
 //				.antMatchers("/api/admin/**").hasIpAddress(standardAppProperties.getProxy()).and().authorizeRequests()
 //				.antMatchers("/api/article/**").permitAll().and().authorizeRequests().antMatchers("/verify**")
 //				.permitAll().and().authorizeRequests().antMatchers("/unsub**").permitAll().and().authorizeRequests()
-				.antMatchers("/api/v1/user/login").permitAll().and().authorizeRequests().antMatchers("/portfolio")
-				.permitAll().
+				.antMatchers("/api/v1/user/login", "/api/v1/hello").permitAll().and().authorizeRequests()
+				.antMatchers("/portfolio").permitAll().
 				// all other requests need to be authenticated
 				anyRequest().authenticated().and().exceptionHandling()
 				.authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
@@ -123,9 +129,21 @@ public class WebSecurityConfig {
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().antMatchers("/portfolio", "ws://localhost:8080/portfolio", "/js/**", "/images/**", "/v3/api-docs", "/configuration/ui",
-				"/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-ui/**",
-				"/swagger-ui/**", "/v3/api-docs/**");
+		return (web) -> web.ignoring().antMatchers("/portfolio", "ws://localhost:8080/portfolio", "/js/**",
+				"/images/**", "/v3/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security",
+				"/swagger-ui.html", "/webjars/**", "/swagger-ui/**", "/swagger-ui/**", "/v3/api-docs/**");
+	}
+
+	// global
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins(allowedOrigins).allowedMethods("GET", "POST", "PUT",
+						"DELETE");
+			}
+		};
 	}
 
 }
