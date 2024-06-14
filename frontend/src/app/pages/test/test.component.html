@@ -1,0 +1,85 @@
+<div class="container-fluid">
+    <!-- <app-page-title title="RimBerry Supplier" [breadcrumbItems]="breadCrumbItems"></app-page-title> -->
+    <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title mb-4">Raw Material</h4>
+              <form class="outer-repeater">
+                <div class="outer">
+                  <div>
+                    <div class="mb-3">
+                        <label for="example-date-input" class="col-md-2 col-form-label">Date</label>
+                        <input class="form-control" type="date" value="2019-08-19" id="example-date-input">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="col-md-2 col-form-label">Supplier</label>
+                            <select class="form-select">
+                                <option>Select</option>
+                                <option>Large select</option>
+                                <option>Small select</option>
+                            </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="col-md-2 col-form-label">Product</label>
+                            <select class="form-select">
+                                <option>Select</option>
+                                <option>Large select</option>
+                                <option>Small select</option>
+                            </select>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <h4 class="card-title mb-4">Entry</h4>
+                              <form class="repeater" [formGroup]="form">
+                                <div formArrayName="formlist">
+                                  <div *ngFor="let data1 of formData().controls; let i=index;">
+                                    <div [formGroupName]="i" class="row">
+                                      <div class="mb-3 col-lg-2">
+                                        <label for="name">NC</label>
+                                        <input type="text" formControlName="name" class="form-control">
+                                      </div>
+                    
+                                      <div class="mb-3 col-lg-2">
+                                        <label>TypeC</label>
+                                        <select class="form-select">
+                                            <option>Select</option>
+                                            <option>Large select</option>
+                                            <option>Small select</option>
+                                        </select>
+                                      </div>
+                    
+                                      <div class="col-lg-2 align-self-center">
+                                            <button class="btn btn-danger" (click)="removeField(i)">
+                                                <span class="mdi mdi-close-box-outline"></span>
+                                            </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <input type="button" class="btn btn-success mt-3 mt-lg-0" value="Add" (click)="addField()">
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mb-3 col-lg-2">
+                        <label for="name">TotalC</label>
+                        <input type="text" formControlName="name" class="form-control" value="0">
+                      </div>
+
+                    <button type="submit" class="btn btn-success">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
