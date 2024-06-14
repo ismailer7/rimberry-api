@@ -1,0 +1,104 @@
+ <table id="example" class="table table-light table-hover table-striped caption-top" style="width:100%">
+    <caption style="text-align: right;">
+        <div class="dropdown" ngbDropdown>
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                Export
+              </button>
+            <div class="dropdown-menu-end" ngbDropdownMenu>
+              <a class="dropdown-item" href="javascript: void(0);">PDF</a>
+              <a class="dropdown-item" href="javascript: void(0);">EXCEL</a>
+            </div>
+          </div>
+    </caption>
+        <thead class="table-dark">
+            <tr>
+                <th scope="col" style="width: 100px">ID</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Supplier</th>
+                          <th scope="col">Product</th>
+                          <th scope="col">GROSSMASS</th>
+                          <th scope="col">TARE</th>
+                          <th scope="col">NETMASS</th>
+                          <th scope="col">TOTAL</th>
+                          <th scope="col">GROSS</th>
+                          <th scope="col">NET</th>
+                          <th scope="col">Generate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let receipt of receipts;">
+                <td>
+                    <a (click)="onCopy(receipt.id);" href="javascript: void(0);" class="text-dark">
+                        <span>{{receipt.id}}</span>
+                      </a>
+                </td>
+                <td>
+                    <a (click)="onCopy(receipt.date);" href="javascript: void(0);" class="text-dark">
+                        <span>{{receipt.date}}</span>
+                      </a>
+                </td>
+                <td>
+                  <h5 class="text-truncate font-size-14">
+                    <a (click)="onCopy(receipt.supplier);" href="javascript: void(0);" class="text-dark">
+                      <span>{{receipt.supplierId}}</span>
+                    </a>
+                  </h5>
+                <td>
+                    <h5 class="text-truncate font-size-14">
+                        <a (click)="onCopy(receipt.product);" href="javascript: void(0);" class="text-dark">
+                            <span>{{receipt.productId}}</span>
+                          </a>
+                      </h5>
+                </td>
+                <td>
+                  <a (click)="onCopy(receipt.grossMass1);" href="javascript: void(0);" class="text-dark">
+                    <span>{{receipt.grossMass1}}</span>
+                  </a>
+                </td>
+                <td>
+                  <a (click)="onCopy(receipt.tare);" href="javascript: void(0);" class="text-dark">
+                    <span>{{receipt.tare}}</span>
+                  </a>
+                </td>
+                <td>
+                  <a (click)="onCopy(receipt.netMass1);" href="javascript: void(0);" class="text-dark">
+                    <span>{{receipt.netMass1}}</span>
+                  </a>
+                </td>
+                <td>
+                  <a (click)="onCopy(receipt.total);" href="javascript: void(0);" class="text-dark">
+                    <span>{{receipt.total}}</span>
+                  </a>
+                </td>
+                <td>
+                  <a (click)="onCopy(receipt.grossMass2);" href="javascript: void(0);" class="text-dark">
+                    <span>{{receipt.grossMass2}}</span>
+                  </a>
+                </td>
+                <td>
+                    <a (click)="onCopy(receipt.netMass2);" href="javascript: void(0);" class="text-dark">
+                      <span>{{receipt.netMass2}}</span>
+                    </a>
+                  </td>
+                  <td>
+                    <button style="border: 0; background-color: transparent; color: red;"><i class="bi bi-file-pdf-fill"></i></button>
+                    <button style="border: 0; background-color: transparent; color: green;"><i class="bi bi-file-earmark-excel-fill"></i></button>
+                    <button style="border: 0; background-color: transparent; color: rgb(124, 124, 124);"><i class="bi bi-printer-fill"></i></button>
+                  </td>
+              </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
