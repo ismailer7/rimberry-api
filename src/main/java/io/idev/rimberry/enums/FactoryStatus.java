@@ -1,4 +1,4 @@
-package io.idev.storapi.enums;
+package io.idev.rimberry.enums;
 
 public enum FactoryStatus {
 

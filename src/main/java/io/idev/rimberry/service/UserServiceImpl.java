@@ -20,7 +20,7 @@ import io.idev.rimberry.entities.User;
 import io.idev.rimberry.repos.IUserRepository;
 import io.idev.rimberry.service.interfaces.IUserService;
 import io.idev.rimberry.utils.ImageUtils;
-import io.idev.storapi.enums.Role;
+import io.idev.rimberry.enums.Role;
 import io.idev.storeapi.model.UserDto;
 
 @Service

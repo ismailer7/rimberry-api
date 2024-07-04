@@ -16,7 +16,7 @@ import io.idev.rimberry.entities.FactoryOwner;
 import io.idev.rimberry.repos.IFactoryOwnerRepository;
 import io.idev.rimberry.repos.IFactoryRepository;
 import io.idev.rimberry.service.interfaces.IFactoryService;
-import io.idev.storapi.enums.FactoryStatus;
+import io.idev.rimberry.enums.FactoryStatus;
 import io.idev.storeapi.model.FactoryDto;
 
 @Service

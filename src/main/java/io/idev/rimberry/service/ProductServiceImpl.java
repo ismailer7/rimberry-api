@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import io.idev.rimberry.entities.Product;
 import io.idev.rimberry.repos.IProductRepository;
 import io.idev.rimberry.service.interfaces.IProductService;
-import io.idev.storapi.enums.ProductType;
+import io.idev.rimberry.enums.ProductType;
 import io.idev.storeapi.model.ProductDto;
 
 @Service

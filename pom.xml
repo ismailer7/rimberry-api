@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>io.idev</groupId>
 	<artifactId>store-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>rimberry-api</name>
 	<description>Rimberry REst API</description>
 	<properties>
