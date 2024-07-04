@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class FactoryService {
   }
 
   delete(factoryId: string) {
-    return this.http.delete<any>(`${environment.api}/factory/delete/${factoryId}`)
+    return this.http.delete<any>('http://localhost:8080/api/v1/factory/delete/' + factoryId)
     .pipe(map(response => {
         console.log('delete operation result : ' + response)
         return response;
@@ -21,21 +20,21 @@ export class FactoryService {
   }
 
   getByPage(page: any) {
-    return this.http.get<any>(`${environment.api}/factory/factories?page=${page}`)
+    return this.http.get<any>(`http://localhost:8080/api/v1/factory/factories?page=${page}`)
     .pipe(map(response => {
         return response;
     }));
   }
   
   add(factory: any) {
-    return this.http.post<any>(`${environment.api}/factory/add`, factory)
+    return this.http.post<any>('http://localhost:8080/api/v1/factory/add', factory)
     .pipe(map(response => {
       return response;
     }))
   }
 
   edit(factory: any) {
-    return this.http.put<any>(`${environment.api}/factory/edit`, factory)
+    return this.http.put<any>('http://localhost:8080/api/v1/factory/edit', factory)
     .pipe(map(response => {
         console.log('Edit operation Response: ', response);
         return response;
@@ -43,7 +42,7 @@ export class FactoryService {
 }
 
   lookup(text: string) {
-    return this.http.get<any>(`${environment.api}/factory/search?text=${text}`)
+    return this.http.get<any>(`http://localhost:8080/api/v1/factory/search?text=${text}`)
     .pipe(map(response => {
         return response;
     }))

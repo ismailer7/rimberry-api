@@ -21,24 +21,15 @@
     -o-transition: .3s all ease;
     transition: .3s all ease;
     position: relative;
-    -webkit-transform: skew(-21deg);
-    -ms-transform: skew(-21deg);
-    transform: skew(-21deg);
     /* Un-skew the text */
   }
 
   input[type=text] {
-    -webkit-transform: skew(-21deg);
-    -ms-transform: skew(-21deg);
-    transform: skew(-21deg);
     margin-right: 5px;
   }
   
   .btn > span {
     display: inline-block;
-    -webkit-transform: skew(21deg);
-    -ms-transform: skew(21deg);
-    transform: skew(21deg);
   }
 
   

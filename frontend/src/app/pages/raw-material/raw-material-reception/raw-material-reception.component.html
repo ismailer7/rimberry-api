@@ -1,12 +1,12 @@
 <div class="container-fluid">
     <app-page-title title="RimBerry Raw Materials" [breadcrumbItems]="breadCrumbItems"></app-page-title>
-    
+
 
     <div class="row">
       <div class="col-lg-12">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title mb-4"> Title Wizard</h4>
+          <h4 class="card-title mb-4"> Rimbery Reception</h4>
 
           <aw-wizard [navBarLayout]="'large-empty-symbols'">
             <aw-wizard-step stepTitle="Create Reception Form">
@@ -23,7 +23,7 @@
             </aw-wizard-step>
             <aw-wizard-step stepTitle="Reception Details">
               <ng-template awWizardStepSymbol>2</ng-template>
-              <form class="outer-repeater" [formGroup]="form" *ngIf="!isLoading">
+              <form class="outer-repeater" [formGroup]="form1" *ngIf="!isLoading">
                 <div class="outer">
                   <div>
                     <div class="mb-3">
@@ -48,14 +48,14 @@
                     </div>
 
                     <div class="row">
-                      <div class="mb-3 col-md-2">
+                      <div class="mb-3 col-md-3">
                         <label for="driver">Driver</label>
                         <input type="text" formControlName="driver" class="form-control">
                       </div>
-  
-                      <div class="mb-3 col-md-2">
+
+                      <div class="mb-3 col-md-4">
                         <label for="driver">Vehicule Registration Number</label>
-                        <input type="text" formControlName="driver" class="form-control">
+                        <input type="text" formControlName="rnumber" class="form-control">
                       </div>
                     </div>
                     <!-- <button type="submit" class="btn btn-success" (click)="onSubmit();">Submit</button> -->
@@ -65,7 +65,7 @@
               <ul class="list-inline wizard mb-0">
                 <li class="previous list-inline-item"><button class="btn btn-secondary" awPreviousStep>Previous</button>
                 </li>
-                <li class="next list-inline-item float-end"><button class="btn btn-secondary" awNextStep>Pallette Details <i class="mdi mdi-chevron-double-right"></i></button>
+                <li class="next list-inline-item float-end"><button [disabled]="!isForm1Valid()" (click)="submitForm1();" class="btn btn-secondary" awNextStep>Pallette Details <i class="mdi mdi-chevron-double-right"></i></button>
                 </li>
               </ul>
             </aw-wizard-step>
@@ -73,17 +73,18 @@
             <aw-wizard-step stepTitle="Palette Details">
               <ng-template awWizardStepSymbol>3</ng-template>
 
-              
-              <form [formGroup]="form">
+
+              <form [formGroup]="form2">
                 <div class="row mt-3">
-                  <div class="mb-3 col-lg-2">
+                  <div class="mb-3 col-lg-3">
                       <label for="pb">PB (KG)</label>
                       <input id="pb" type="text" formControlName="pb" class="form-control" value="{{pb}}" (keyup)="savePalettePoidsBrute($event);">
                   </div>
-                  <div class="mb-3 col-lg-2">
+                  <div class="mb-3 col-lg-3">
                       <label for="pp">PP (KG)</label>
                       <input id="pp" type="text" formControlName="pp" class="form-control" value="{{pp}}" (keyup)="savePalettePoids($event);">
                   </div>
+                  <div class="col-md-3"></div>
                 </div>
               </form>
 
@@ -92,7 +93,7 @@
                   <div class="card">
                     <div class="card-body">
                       <h4 class="card-title mb-4">NC Entry</h4>
-                      <form class="repeater" [formGroup]="form">
+                      <form class="repeater" [formGroup]="form2">
                         <div formArrayName="formlist">
                           <div *ngFor="let data1 of formData().controls; let i=index;">
                             <div [formGroupName]="i" class="row">
@@ -100,8 +101,8 @@
                                 <label for="name">NC</label>
                                 <input type="text" formControlName="nc" class="form-control" (keyup)="onNCWrite($event, i);">
                               </div>
-            
-                              <div class="mb-3 col-lg-2">
+
+                              <div class="mb-3 col-lg-3">
                                 <label>TypeC</label>
                                 <select class="form-select" (change)="selectType($event, i)" formControlName="typec">
                                     <option>Select</option>
@@ -126,27 +127,41 @@
                 </div>
               </div>
 
-              <form action="" [formGroup]="form">
+              <form action="" [formGroup]="form2">
                 <div class="row">
-                  <div class="mb-3 col-md-2">
+                  <div class="mb-3 col-md-3">
                     <label for="name">NC Total</label>
                     <input disabled type="text" formControlName="total" class="form-control" value="{{totalNC}}">
                   </div>
 
-                  <div class="mb-3 col-md-2">
+                  <div class="mb-3 col-md-3">
                     <label for="name">Tare Caisse</label>
                     <input disabled type="text" formControlName="tareCaisse" class="form-control" value="{{grossMass}}">
                   </div>
 
-                  <div class="mb-3 col-md-2">
+                  <div class="mb-3 col-md-3">
                     <label for="name">TARE</label>
                     <input disabled type="text" formControlName="gross" class="form-control" value="{{tare}}">
                   </div>
 
-                  <div class="mb-3 col-lg-2">
+                  <div class="mb-3 col-lg-3">
                     <label for="name">Net MASS (KG)</label>
                     <input disabled type="text" formControlName="net" class="form-control" value="{{netmass}}">
                   </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col-lg-3">
+                  <label for="name">TE</label>
+                  <input disabled type="text" class="form-control" value="{{te}}">
+                </div>
+                <div class="mb-3 col-lg-3">
+                  <label for="name">TO</label>
+                  <input disabled type="text" class="form-control" value="{{to}}">
+                </div>
+                <div class="mb-3 col-lg-3">
+                  <label for="name">TB</label>
+                  <input disabled type="text" class="form-control" value="{{tb}}">
+                </div>
               </div>
               </form>
 
@@ -154,12 +169,13 @@
                 <div class="col-md-2">
                   <button type="submit" class="btn btn-success" (click)="addPallete();">Add Palette</button>
                 </div>
+
               </div> <br><br>
 
               <ul class="list-inline wizard mb-0">
                 <li class="previous list-inline-item"><button class="btn btn-secondary" awPreviousStep> <i class="mdi mdi-chevron-double-left"></i> Reception General Details</button>
                 </li>
-                <li class="next list-inline-item float-end"><button class="btn btn-secondary" awNextStep>Pallette List <i class="mdi mdi-chevron-double-right"></i></button>
+                <li class="next list-inline-item float-end"><button (click)="isForm2Valid();" class="btn btn-secondary" awNextStep>Pallette List <i class="mdi mdi-chevron-double-right"></i></button>
                 </li>
               </ul>
             </aw-wizard-step>
@@ -181,10 +197,13 @@
                     </caption>
                         <thead class="table-white">
                             <tr>
-                                <th scope="col" style="width: 100px">ID</th>
+                                <th scope="col" style="width: 100px">NLOT</th>
                                           <th scope="col">PB</th>
                                           <th scope="col">PP</th>
                                           <th scope="col">TOTAL CASES</th>
+                                          <th scope="col">TE (0.70)</th>
+                                          <th scope="col">TO (1.20)</th>
+                                          <th scope="col">TB (1.10)</th>
                                           <th scope="col">TARE CASES</th>
                                           <th scope="col">TARE</th>
                                           <th scope="col">NET</th>
@@ -192,7 +211,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let pallete of palettes;">
+                            <tr *ngFor="let pallete of palettes; let i=index;">
                                 <td>
                                     <a (click)="onCopy(pallete.id);" href="javascript: void(0);" class="text-dark">
                                         <span>{{pallete.id}}</span>
@@ -204,18 +223,29 @@
                                       </a>
                                 </td>
                                 <td>
-                                  <h5 class="text-truncate font-size-14">
                                     <a (click)="onCopy(pallete.pp);" href="javascript: void(0);" class="text-dark">
                                       <span>{{pallete.pp}}</span>
                                     </a>
-                                  </h5>
                                 <td>
-                                    <h5 class="text-truncate font-size-14">
                                         <a (click)="onCopy(pallete.totalCases);" href="javascript: void(0);" class="text-dark">
                                             <span>{{pallete.totalCases}}</span>
                                           </a>
-                                      </h5>
                                 </td>
+                              <td>
+                                <a href="javascript: void(0);" class="text-dark">
+                                  <span>{{pallete.te}}</span>
+                                </a>
+                              </td>
+                              <td>
+                                <a href="javascript: void(0);" class="text-dark">
+                                  <span>{{pallete.to}}</span>
+                                </a>
+                              </td>
+                              <td>
+                                <a href="javascript: void(0);" class="text-dark">
+                                  <span>{{pallete.tb}}</span>
+                                </a>
+                              </td>
                                 <td>
                                   <a (click)="onCopy(pallete.tareCases);" href="javascript: void(0);" class="text-dark">
                                     <span>{{pallete.tareCases}}</span>
@@ -232,8 +262,11 @@
                                   </a>
                                 </td>
                                   <td>
-                                    <button style="border: 0; background-color: transparent; color: rgb(248, 72, 72);">
+                                    <button style="border: 0; background-color: transparent; color: rgb(248, 72, 72);" (click)="delete(i);">
                                       <span class="badge bg-danger rounded-pill">delete</span>
+                                    </button>
+                                    <button style="border: 0; background-color: transparent; color: rgb(52, 238, 108);" (click)="printPallete(i);">
+                                      <span class="badge bg-success rounded-pill">print</span>
                                     </button>
                                   </td>
                               </tr>
@@ -248,142 +281,120 @@
               <ul class="list-inline wizard mb-0">
                 <li class="previous list-inline-item"><button class="btn btn-secondary" awPreviousStep><i class="mdi mdi-chevron-double-left"></i> Pallette Details</button>
                 </li>
-                <li class="next list-inline-item float-end"><button class="btn btn-secondary" awNextStep>Confirm Pallettes <i class="mdi mdi-chevron-double-right"></i></button>
+                <li class="next list-inline-item float-end"><button (click)="calculateReceptionTotal();" class="btn btn-secondary" awNextStep>Confirm Pallettes <i class="mdi mdi-chevron-double-right"></i></button>
                 </li>
               </ul>
             </aw-wizard-step>
 
             <aw-wizard-step stepTitle="Reception Confirm">
               <ng-template awWizardStepSymbol>5</ng-template>
-              <div class="row justify-content-center">
-                <div class="col-lg-6">
-                  <div class="text-center">
-                    <div class="mb-4">
-                      <i class="mdi mdi-check-circle-outline text-success display-4"></i>
+
+              <div class="card">
+                <div class="card-body">
+                  <div class="container mb-5 mt-3" id="invoice">
+                    <div class="row d-flex align-items-baseline">
+                      <div class="col-xl-9">
+                        <p style="color: #7e8d9f;font-size: 20px;">Invoice >> <strong>ID: #123-123</strong></p>
+                      </div>
+                      <div class="col-xl-3 float-end">
+                        <a data-mdb-ripple-init class="btn btn-light text-capitalize border-0" data-mdb-ripple-color="dark"><i
+                            class="fas fa-print text-primary"></i> Print</a>
+                        <a data-mdb-ripple-init class="btn btn-light text-capitalize" data-mdb-ripple-color="dark"><i
+                            class="far fa-file-pdf text-danger"></i> Export</a>
+                      </div>
+                      <hr>
                     </div>
-                    <div class="container-fluid" id="invoice">
+
+                    <div class="container">
+                      <div class="col-md-12">
+                        <div class="text-center">
+                          <img src="../../../../assets/images/brands/rimberry2-logo.png" alt="" width="150" height="100">
+                          <p class="pt-0">Rimberry Administration System</p>
+                        </div>
+
+                      </div>
+
+
                       <div class="row">
-                        <div class="col-lg-12">
-                          <div class="card">
-                            <div class="card-body">
-                              <div class="invoice-title">
-                                <h4 class="float-end font-size-16"><strong>Reception # 12345</strong></h4>
-                                <div class="mb-3" style="text-align: left;">
-                                  <img src="../../../../assets/images/brands/rimberry2-logo.png" alt="logo" height="40" />
-                                </div>
-                              </div>
-                              <hr>
-                              <div class="row">
-                                <div class="col-6 mt-3" style="text-align: left;">
-                                  <address>
-                                    <strong>Reception Date:</strong><br>
-                                    October 16, 2019<br><br>
-                                  </address>
-                                </div>
-                                <!-- <div class="col-md-6" style="text-align: left;">
-                                  <address>
-                                    <strong>Billed To:</strong><br>
-                                    John Smith<br>
-                                    1234 Main<br>
-                                    Apt. 4B<br>
-                                    Springfield, ST 54321
-                                  </address>
-                                </div> -->
-                                <div class="col-md-6 text-sm-end">
-                                  <address>
-                                    <strong>Shipped To:</strong><br>
-                                    Kenny Rigdon<br>
-                                    1234 Main<br>
-                                    Apt. 4B<br>
-                                    Springfield, ST 54321
-                                  </address>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-lg-6">
-                                  <address>
-                                    <strong>Payment Method:</strong><br>
-                                    Visa ending **** 4242<br>
-                                    jsmith@email.com
-                                  </address>
-                                </div>
-                                <div class="col-6 mt-3 text-sm-end">
-                                  <address>
-                                    <strong>Reception Date:</strong><br>
-                                    October 16, 2019<br><br>
-                                  </address>
-                                </div>
-                              </div>
-                              <div class="py-2 mt-3">
-                                <h3 class="font-size-15 fw-bold">Order summary</h3>
-                              </div>
-                              <div class="table-responsive">
-                                <table class="table">
-                                  <thead>
-                                    <tr>
-                                      <th style="width: 70px;">No.</th>
-                                      <th>Item</th>
-                                      <th class="text-end">Price</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>01</td>
-                                      <td>Skote - Bootstrap 4 Admin Dashboard</td>
-                                      <td class="text-end">$499.00</td>
-                                    </tr>
-                    
-                                    <tr>
-                                      <td>02</td>
-                                      <td>Skote - Bootstrap 4 Landing Template</td>
-                                      <td class="text-end">$399.00</td>
-                                    </tr>
-                    
-                                    <tr>
-                                      <td>03</td>
-                                      <td>Veltrix - Bootstrap 4 Admin Template</td>
-                                      <td class="text-end">$499.00</td>
-                                    </tr>
-                                    <tr>
-                                      <td colspan="2" class="text-end">Sub Total</td>
-                                      <td class="text-end">$1397.00</td>
-                                    </tr>
-                                    <tr>
-                                      <td colspan="2" class="border-0 text-end">
-                                        <strong>Shipping</strong></td>
-                                      <td class="border-0 text-end">$13.00</td>
-                                    </tr>
-                                    <tr>
-                                      <td colspan="2" class="border-0 text-end">
-                                        <strong>Total</strong></td>
-                                      <td class="border-0 text-end">
-                                        <h4 class="m-0">$1410.00</h4>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              <div class="d-print-none">
-                                <div class="float-end">
-                                  <a href="javascript:void(0)" class="btn btn-success" (click)="print('invoice')"><i class="fa fa-print"></i></a>
-                                  <a href="javascript: void(0);" class="btn btn-primary w-md ms-1">Send</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                        <div class="col-xl-8">
+                          <ul class="list-unstyled">
+                            <li class="text-muted">Supplier: <span style="color:#5d9fc5 ;">{{supplierName}}</span></li>
+                            <li class="text-muted">{{supplierAddress}}</li>
+                            <li class="text-muted">{{supplierRib}}</li>
+                            <li class="text-muted"><i class="fas fa-phone"></i> {{supplierPhone}}</li>
+                          </ul>
+                        </div>
+                        <div class="col-xl-4">
+                          <p class="text-muted">Invoice</p>
+                          <ul class="list-unstyled">
+                            <li class="text-muted"><i class="fas fa-circle" style="color:#eb5065 ;"></i> <span
+                                class="fw-bold">ID:</span>#123-456</li>
+                            <li class="text-muted"><i class="fas fa-circle" style="color:#eb5065 ;"></i> <span
+                                class="fw-bold">Creation Date: </span>{{date}}</li>
+                            <li class="text-muted"><i class="fas fa-circle" style="color:#eb5065 ;"></i> <span
+                                class="me-1 fw-bold">Status:</span><span class="badge bg-warning text-black fw-bold">
+                                Unpaid</span></li>
+                          </ul>
                         </div>
                       </div>
-                      <!-- end row -->
-                    
-                    </div> <!-- container-fluid -->
 
+                      <div class="row">
+                        <div class="col-xl-8">
+                          <ul class="list-unstyled">
+                            <li class="text-muted">Product: <span style="color:#5d9fc5 ;">{{productName}}</span></li>
+                            <li class="text-muted">Driver: <span style="color:#5d9fc5 ;">{{driver}}</span></li>
+                            <li class="text-muted">VRN: <span style="color:#5d9fc5 ;">{{vrn}}</span></li>
+                          </ul>
+                        </div>
+
+                      </div>
+
+                      <div class="row my-2 mx-1 justify-content-center">
+                        <table class="table table-striped table-borderless">
+                          <thead style="background-color:#84B0CA ;" class="text-white">
+                            <tr>
+                              <th scope="col">PB</th>
+                              <th scope="col">TP</th>
+                              <th scope="col">PP</th>
+                              <th scope="col">TC</th>
+                              <th scope="col">TAREP</th>
+                              <th scope="col">TARE</th>
+                              <th scope="col">TN</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{{receptionPB}}</td>
+                              <td>{{totalPalletes}}</td>
+                              <td>{{receptionPP}}</td>
+                              <td>{{receptionTotalCaisses}}</td>
+                              <td>{{receptionTareCases}}</td>
+                              <td>{{receptionTare}}</td>
+                              <td>{{receptionNet}}</td>
+                            </tr>
+                          </tbody>
+
+                        </table>
+                      </div>
+
+                      <hr>
+
+                    </div>
                   </div>
                 </div>
               </div>
+
+
+
+
+
+
+
               <ul class="list-inline wizard mb-0">
                 <li class="previous list-inline-item"><button class="btn btn-secondary" awPreviousStep>Previous</button>
                 </li>
-                <li class="next list-inline-item float-end"><button class="btn btn-secondary" awNextStep>Confirm Reception</button>
+                <li class="next list-inline-item float-end"><button (click)="onSubmit();" class="btn btn-secondary" awNextStep>Confirm Reception</button>
                 </li>
               </ul>
             </aw-wizard-step>
@@ -393,8 +404,8 @@
     </div>
     </div>
 
-    
-    <<!-- div class="row">
+
+    <!-- div class="row">
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
@@ -454,7 +465,7 @@
                                         <label for="name">NC</label>
                                         <input type="text" formControlName="nc" class="form-control" (keyup)="onNCWrite($event, i);">
                                       </div>
-                    
+
                                       <div class="mb-3 col-lg-2">
                                         <label>TypeC</label>
                                         <select class="form-select" (change)="selectType($event, i)" formControlName="typec">
@@ -484,12 +495,12 @@
                             <label for="name">Total Caisses</label>
                             <input disabled type="text" formControlName="total" class="form-control" value="{{totalNC}}">
                           </div>
-    
+
                           <div class="mb-3 col-md-2">
                             <label for="name">Gross MASS (KG)</label>
                             <input disabled type="text" formControlName="gross" class="form-control" value="{{grossMass}}">
                           </div>
-    
+
                           <div class="mb-3 col-lg-2">
                             <label for="name">Net MASS (KG)</label>
                             <input  type="text" formControlName="net" class="form-control" value="{{netmass}}">

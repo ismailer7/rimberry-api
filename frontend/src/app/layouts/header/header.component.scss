@@ -1,0 +1,21 @@
+#page-header-user-dropdownn #page-header-notifications-dropdown {
+    border: none;
+}
+
+#page-header-user-dropdown:hover, #page-header-notifications-dropdown:hover {
+    border: none;
+}
+
+#page-header-user-dropdown:focus, #page-header-notifications-dropdown:focus{
+    border: none;
+    background-color: lightgray;
+    border-radius: 0;
+}
+
+#vertical-menu-btn:focus {
+    border: none;
+}
+
+.btn {
+    border: none;
+}
